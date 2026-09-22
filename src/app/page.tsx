@@ -250,12 +250,21 @@ export default function Home() {
       </section>
 
       {/* GARANTIA */}
-      <section className="px-4 py-14 text-center">
-        <div className="mx-auto max-w-md rounded-xl border border-white/10 bg-white/[0.03] p-6">
-          <p className="text-2xl">🛡️</p>
-          <p className="mt-2 text-sm font-semibold">Garantia de 7 dias</p>
-          <p className="mt-1 text-xs text-white/50">
-            Se não fizer sentido pro seu negócio, devolvemos seu dinheiro.
+      <section className="px-4 py-16 text-center" style={{ backgroundColor: "#0a0a0a" }}>
+        <div className="mx-auto max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/garantia-15-dias.png"
+            alt="Selo de garantia de 15 dias"
+            width={200}
+            height={200}
+            className="mx-auto mb-4 h-[200px] w-[200px] max-w-[70%] object-contain"
+            style={{ filter: "drop-shadow(0 14px 30px rgba(0,0,0,0.4))" }}
+          />
+          <p className="text-lg font-semibold text-white">Garantia de 15 dias</p>
+          <p className="mt-2 text-sm text-white/50">
+            Se não fizer sentido pro seu negócio, devolvemos <strong className="text-white/80">100%</strong> do seu
+            dinheiro.
           </p>
         </div>
       </section>
