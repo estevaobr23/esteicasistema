@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { uploadBusinessMedia } from "@/lib/storage/upload";
 import type { Business } from "@/lib/domain/business";
+import { CATALOG_TEMPLATES, TEMPLATE_IDS, type TemplateId } from "@/lib/domain/catalog-templates";
 
-const TEMPLATES = [
-  { id: "premium_dark", nome: "Premium Dark", desc: "Preto, grafite, elegante.", swatch: "#0a0a0a" },
-  { id: "clean_detail", nome: "Clean Detail", desc: "Claro, clean, premium.", swatch: "#f5f5f4" },
-  { id: "performance", nome: "Performance", desc: "Esportivo, mais agressivo.", swatch: "#dc2626" },
-] as const;
+function defaultTemplateId(business: Business): TemplateId {
+  const current = business.template_id as TemplateId;
+  return TEMPLATE_IDS.includes(current) ? current : "classico_dark";
+}
 
 export default function VisualForm({
   business,
@@ -19,7 +19,7 @@ export default function VisualForm({
   action: (formData: FormData) => void;
   submitLabel?: string;
 }) {
-  const [theme, setTheme] = useState(business.theme);
+  const [templateId, setTemplateId] = useState<TemplateId>(defaultTemplateId(business));
   const [primaryColor, setPrimaryColor] = useState(business.primary_color);
   const [secondaryColor, setSecondaryColor] = useState(business.secondary_color);
   const [logoUrl, setLogoUrl] = useState(business.logo_url ?? "");
@@ -39,7 +39,7 @@ export default function VisualForm({
 
   return (
     <form action={action} className="space-y-6">
-      <input type="hidden" name="theme" value={theme} />
+      <input type="hidden" name="catalog_template_id" value={templateId} />
       <input type="hidden" name="primary_color" value={primaryColor} />
       <input type="hidden" name="secondary_color" value={secondaryColor} />
       <input type="hidden" name="logo_url" value={logoUrl} />
@@ -48,23 +48,30 @@ export default function VisualForm({
       <div>
         <span className="mb-2 block text-sm font-medium text-neutral-300">Template</span>
         <div className="grid grid-cols-3 gap-3">
-          {TEMPLATES.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setTheme(t.id)}
-              className={`rounded-lg border p-3 text-left transition ${
-                theme === t.id ? "border-white bg-neutral-900" : "border-neutral-800 bg-neutral-950"
-              }`}
-            >
-              <div
-                className="mb-2 h-10 w-full rounded"
-                style={{ backgroundColor: t.swatch, border: "1px solid rgba(255,255,255,0.1)" }}
-              />
-              <p className="text-xs font-semibold text-white">{t.nome}</p>
-              <p className="mt-0.5 text-[11px] text-neutral-500">{t.desc}</p>
-            </button>
-          ))}
+          {TEMPLATE_IDS.map((id) => {
+            const t = CATALOG_TEMPLATES[id];
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => {
+                  setTemplateId(id);
+                  setPrimaryColor(t.palette.primaryColorDefault);
+                  setSecondaryColor(t.palette.secondaryColorDefault);
+                }}
+                className={`rounded-lg border p-3 text-left transition ${
+                  templateId === id ? "border-white bg-neutral-900" : "border-neutral-800 bg-neutral-950"
+                }`}
+              >
+                <div
+                  className="mb-2 h-10 w-full rounded"
+                  style={{ backgroundColor: t.palette.bg, border: "1px solid rgba(255,255,255,0.1)" }}
+                />
+                <p className="text-xs font-semibold text-white">{t.nome}</p>
+                <p className="mt-0.5 text-[11px] text-neutral-500">{t.descricao}</p>
+              </button>
+            );
+          })}
         </div>
       </div>
 

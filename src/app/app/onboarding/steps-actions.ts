@@ -5,20 +5,29 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentBusinessRaw } from "@/lib/domain/business-raw";
 import { limitesDoPlano } from "@/lib/domain/plans";
+import { getCatalogTemplate } from "@/lib/domain/catalog-templates";
 
 export async function saveVisual(formData: FormData) {
   const business = await getCurrentBusinessRaw();
   const supabase = await createClient();
 
-  const theme = String(formData.get("theme") ?? "premium_dark");
-  const primary_color = String(formData.get("primary_color") ?? "#0EA5E9");
-  const secondary_color = String(formData.get("secondary_color") ?? "#111827");
+  const catalogTemplate = getCatalogTemplate(String(formData.get("catalog_template_id") ?? "classico_dark"));
+  const theme = catalogTemplate.isDark ? "premium_dark" : "clean_detail";
+  const primary_color = String(formData.get("primary_color") ?? catalogTemplate.palette.primaryColorDefault);
+  const secondary_color = String(formData.get("secondary_color") ?? catalogTemplate.palette.secondaryColorDefault);
   const logo_url = formData.get("logo_url") ? String(formData.get("logo_url")) : undefined;
   const cover_url = formData.get("cover_url") ? String(formData.get("cover_url")) : undefined;
 
   await supabase
     .from("businesses")
-    .update({ theme, primary_color, secondary_color, logo_url, cover_url })
+    .update({
+      template_id: catalogTemplate.id,
+      theme,
+      primary_color,
+      secondary_color,
+      logo_url,
+      cover_url,
+    })
     .eq("id", business.id);
 
   revalidatePath("/app/onboarding");

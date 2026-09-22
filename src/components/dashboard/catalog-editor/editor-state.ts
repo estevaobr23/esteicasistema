@@ -44,7 +44,6 @@ export type EditorState = {
 };
 
 export type EditorAction =
-  | { type: "SET_THEME"; theme: string }
   | { type: "SET_COLOR"; key: "primary" | "secondary"; value: string }
   | { type: "SET_LOGO_URL"; url: string }
   | { type: "SET_COVER_URL"; url: string }
@@ -69,8 +68,6 @@ export type EditorAction =
 
 export function editorReducer(state: EditorState, action: EditorAction): EditorState {
   switch (action.type) {
-    case "SET_THEME":
-      return { ...state, business: { ...state.business, theme: action.theme }, dirty: true };
     case "SET_COLOR":
       return {
         ...state,
