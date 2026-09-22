@@ -1,3 +1,5 @@
+import FloatingHeader from "@/components/landing/FloatingHeader";
+
 const PRIMARY = "#e11d2a";
 const PRIMARY_DEEP = "#b8121e";
 const LIGHT_BG = "#f2efec"; // off-white dessaturado, nunca branco puro
@@ -7,21 +9,10 @@ export default function Home() {
   return (
     <div className="bg-[#0a0a0a] text-white">
       {/* HEADER — só logo e âncoras, sem CTA de conta */}
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0a0a0a]/90 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <span className="text-sm font-bold tracking-tight">
-            VITRINE<span style={{ color: PRIMARY }}>DETAIL</span>
-          </span>
-          <nav className="hidden gap-6 text-sm text-white/60 sm:flex">
-            <a href="#recursos" className="hover:text-white">Recursos</a>
-            <a href="#planos" className="hover:text-white">Planos</a>
-            <a href="#faq" className="hover:text-white">Perguntas</a>
-          </nav>
-        </div>
-      </header>
+      <FloatingHeader />
 
       {/* HERO */}
-      <section className="px-4 py-20 text-center">
+      <section className="px-4 pb-20 pt-24 text-center">
         <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">
           Gestão de vitrine para estética automotiva
         </p>
