@@ -11,6 +11,7 @@ import BeforeAfterSlider from "@/components/catalog/BeforeAfterSlider";
 import ServiceGallery from "@/components/catalog/ServiceGallery";
 import YoutubeEmbed from "@/components/catalog/YoutubeEmbed";
 import type { SectionConfig } from "@/lib/domain/catalog-sections";
+import { getCatalogTemplate } from "@/lib/domain/catalog-templates";
 
 type Business = Database["public"]["Tables"]["businesses"]["Row"];
 type ServiceFeature = Database["public"]["Tables"]["service_features"]["Row"];
@@ -67,11 +68,22 @@ export default function CatalogPresentation({
   reviews,
   sectionsConfig,
 }: CatalogPresentationProps) {
-  const isDark = business.theme !== "clean_detail";
-  const bg = isDark ? "#0a0a0a" : "#fafaf9";
-  const bgDeep = isDark ? "#141414" : "#f0f0ef";
-  const textColor = isDark ? "#ffffff" : "#171717";
-  const textMuted = isDark ? "rgba(255,255,255,0.6)" : "rgba(23,23,23,0.6)";
+  const template = getCatalogTemplate(business.template_id);
+  const isDark = template.isDark;
+  const bg = template.palette.bg;
+  const bgDeep = template.palette.bgDeep;
+  const textColor = template.palette.textColor;
+  const textMuted = template.palette.textMuted;
+
+  const cardStyleProps: React.CSSProperties = {
+    borderRadius: template.cardStyle.borderRadius,
+    borderWidth: template.cardStyle.borderWidth,
+    boxShadow: template.cardStyle.shadow,
+  };
+  const headingStyleProps: React.CSSProperties = {
+    fontWeight: template.typography.headingWeight,
+    letterSpacing: template.typography.headingTracking,
+  };
 
   const destaques = services.filter((s) => s.featured).slice(0, 3);
   const categorias = Array.from(new Set(portfolioItems.map((p) => p.category).filter(Boolean)));
@@ -83,7 +95,7 @@ export default function CatalogPresentation({
     servicos: (bgColor) =>
       services.length > 0 && (
         <section key="servicos" id="servicos" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-2 text-center text-2xl font-bold">Serviços</h2>
+          <h2 className="mb-2 text-center text-2xl" style={headingStyleProps}>Serviços</h2>
           <p className="mb-6 text-center text-sm" style={{ color: textMuted }}>
             Selecione seu veículo para ver o preço.
           </p>
@@ -95,8 +107,8 @@ export default function CatalogPresentation({
             {services.map((s) => (
               <div
                 key={s.id}
-                className="flex flex-col overflow-hidden rounded-xl border"
-                style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)", backgroundColor: bg }}
+                className="flex flex-col overflow-hidden border"
+                style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)", backgroundColor: bg, ...cardStyleProps }}
               >
                 <ServiceMedia service={s} isDark={isDark} />
                 <div className="flex flex-1 flex-col gap-3 p-4">
@@ -143,10 +155,10 @@ export default function CatalogPresentation({
     destaques: (bgColor) =>
       destaques.length > 0 && (
         <section key="destaques" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-8 text-center text-2xl font-bold">Mais procurados</h2>
+          <h2 className="mb-8 text-center text-2xl" style={headingStyleProps}>Mais procurados</h2>
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
             {destaques.map((s) => (
-              <div key={s.id} className="rounded-xl border p-4 text-center" style={{ borderColor: business.primary_color }}>
+              <div key={s.id} className="border p-4 text-center" style={{ borderColor: business.primary_color, ...cardStyleProps }}>
                 <p className="font-semibold">{s.name}</p>
                 <p className="mt-1 text-xs" style={{ color: textMuted }}>
                   {s.short_description}
@@ -160,7 +172,7 @@ export default function CatalogPresentation({
     antes_depois: (bgColor) =>
       portfolioItems.length > 0 && (
         <section key="antes_depois" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-2 text-center text-2xl font-bold">Resultados</h2>
+          <h2 className="mb-2 text-center text-2xl" style={headingStyleProps}>Resultados</h2>
           <p className="mb-8 text-center text-sm" style={{ color: textMuted }}>
             Antes e depois dos nossos trabalhos.
           </p>
@@ -195,7 +207,7 @@ export default function CatalogPresentation({
     branding_video: () =>
       business.branding_video_url ? (
         <section key="branding_video" className="px-4 py-16" style={{ backgroundColor: "#ffffff", color: "#171717" }}>
-          <h2 className="mb-8 text-center text-2xl font-bold">Conheça nosso trabalho</h2>
+          <h2 className="mb-8 text-center text-2xl" style={headingStyleProps}>Conheça nosso trabalho</h2>
           <div className="mx-auto max-w-md">
             <YoutubeEmbed url={business.branding_video_url} title={business.name} />
           </div>
@@ -205,13 +217,13 @@ export default function CatalogPresentation({
     pacotes: (bgColor) =>
       packages.length > 0 && (
         <section key="pacotes" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-8 text-center text-2xl font-bold">Pacotes</h2>
+          <h2 className="mb-8 text-center text-2xl" style={headingStyleProps}>Pacotes</h2>
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
             {packages.map((p) => (
               <div
                 key={p.id}
-                className="flex flex-col overflow-hidden rounded-xl border"
-                style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)" }}
+                className="flex flex-col overflow-hidden border"
+                style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)", ...cardStyleProps }}
               >
                 {p.image_url && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -249,7 +261,7 @@ export default function CatalogPresentation({
     horarios: (bgColor) =>
       proximos.length > 0 && (
         <section key="horarios" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-8 text-center text-2xl font-bold">Próximos horários</h2>
+          <h2 className="mb-8 text-center text-2xl" style={headingStyleProps}>Próximos horários</h2>
           <div className="mx-auto flex max-w-2xl flex-wrap justify-center gap-3">
             {proximos.map((h, i) => (
               <WhatsappButton
@@ -271,13 +283,13 @@ export default function CatalogPresentation({
     avaliacoes: (bgColor) =>
       reviews.length > 0 && (
         <section key="avaliacoes" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-8 text-center text-2xl font-bold">Avaliações</h2>
+          <h2 className="mb-8 text-center text-2xl" style={headingStyleProps}>Avaliações</h2>
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
             {reviews.map((r) => (
               <div
                 key={r.id}
-                className="rounded-xl border p-4"
-                style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)" }}
+                className="border p-4"
+                style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)", ...cardStyleProps }}
               >
                 <p className="text-sm font-semibold">{r.customer_name}</p>
                 <p className="text-amber-400">
@@ -298,7 +310,7 @@ export default function CatalogPresentation({
     sobre: (bgColor) =>
       business.about && (
         <section key="sobre" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-4 text-center text-2xl font-bold">Sobre</h2>
+          <h2 className="mb-4 text-center text-2xl" style={headingStyleProps}>Sobre</h2>
           <p className="mx-auto max-w-2xl text-center text-sm" style={{ color: textMuted }}>
             {business.about}
           </p>
@@ -308,7 +320,7 @@ export default function CatalogPresentation({
     localizacao: (bgColor) =>
       (business.address || business.city) && (
         <section key="localizacao" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
-          <h2 className="mb-4 text-center text-2xl font-bold">Localização</h2>
+          <h2 className="mb-4 text-center text-2xl" style={headingStyleProps}>Localização</h2>
           <p className="text-center text-sm" style={{ color: textMuted }}>
             {business.address}
             {business.address && business.city && " — "}
@@ -420,7 +432,7 @@ export default function CatalogPresentation({
         {/* CTA FINAL */}
         {whatsapp && (
           <section className="px-4 py-20 text-center" style={{ backgroundColor: business.secondary_color, color: "#fff" }}>
-            <h2 className="mb-6 text-2xl font-bold">Quer cuidar do seu carro?</h2>
+            <h2 className="mb-6 text-2xl" style={headingStyleProps}>Quer cuidar do seu carro?</h2>
             <WhatsappButton
               numero={whatsapp}
               businessId={business.id}

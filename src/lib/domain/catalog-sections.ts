@@ -34,7 +34,10 @@ const DEFAULT_SECTIONS_CONFIG: SectionConfig[] = SECTION_IDS.map((id) => ({
   visible: id !== "branding_video",
 }));
 
-export function normalizeSectionsConfig(raw: unknown): SectionConfig[] {
+export function normalizeSectionsConfig(
+  raw: unknown,
+  fallback: SectionConfig[] = DEFAULT_SECTIONS_CONFIG
+): SectionConfig[] {
   const parsed = Array.isArray(raw) ? (raw as Partial<SectionConfig>[]) : [];
   const byId = new Map<string, boolean>();
   for (const entry of parsed) {
@@ -43,7 +46,7 @@ export function normalizeSectionsConfig(raw: unknown): SectionConfig[] {
     }
   }
 
-  if (byId.size === 0) return DEFAULT_SECTIONS_CONFIG;
+  if (byId.size === 0) return fallback;
 
   const ordered: SectionConfig[] = parsed
     .filter((entry): entry is SectionConfig => !!entry && SECTION_IDS.includes(entry.id as SectionId))
@@ -58,4 +61,12 @@ export function normalizeSectionsConfig(raw: unknown): SectionConfig[] {
   }
 
   return ordered;
+}
+
+export function moveSectionId(ids: SectionId[], index: number, direction: -1 | 1): SectionId[] {
+  const target = index + direction;
+  if (target < 0 || target >= ids.length) return ids;
+  const next = [...ids];
+  [next[index], next[target]] = [next[target], next[index]];
+  return next;
 }

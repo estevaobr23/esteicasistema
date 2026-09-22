@@ -111,6 +111,7 @@ export type Database = {
           secondary_color: string
           sections_config: Json
           slug: string
+          template_id: string
           theme: string
           updated_at: string
           whatsapp: string | null
@@ -140,6 +141,7 @@ export type Database = {
           secondary_color?: string
           sections_config?: Json
           slug: string
+          template_id?: string
           theme?: string
           updated_at?: string
           whatsapp?: string | null
@@ -169,6 +171,7 @@ export type Database = {
           secondary_color?: string
           sections_config?: Json
           slug?: string
+          template_id?: string
           theme?: string
           updated_at?: string
           whatsapp?: string | null

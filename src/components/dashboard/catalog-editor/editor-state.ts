@@ -1,5 +1,6 @@
 import type { Database } from "@/lib/supabase/types";
 import type { SectionConfig, SectionId } from "@/lib/domain/catalog-sections";
+import { getCatalogTemplate, type TemplateId } from "@/lib/domain/catalog-templates";
 
 type Business = Database["public"]["Tables"]["businesses"]["Row"];
 type ServiceRow = Database["public"]["Tables"]["services"]["Row"];
@@ -18,6 +19,7 @@ export type ServiceDraft = {
 };
 
 export type BusinessDraft = {
+  template_id: string;
   theme: string;
   primary_color: string;
   secondary_color: string;
@@ -34,6 +36,7 @@ export type EditorState = {
   business: BusinessDraft;
   services: ServiceDraft[];
   sectionsConfig: SectionConfig[];
+  templateCustomized: boolean;
   dirty: boolean;
   saving: boolean;
   lastSavedAt: number | null;
@@ -59,6 +62,7 @@ export type EditorAction =
       value: string;
     }
   | { type: "SET_SERVICE_GALLERY"; serviceId: string; urls: string[] }
+  | { type: "APPLY_TEMPLATE"; templateId: TemplateId }
   | { type: "SAVING"; saving: boolean }
   | { type: "SAVE_SUCCESS"; savedAt: number }
   | { type: "SAVE_ERROR"; message: string };
@@ -74,6 +78,7 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
           ...state.business,
           [action.key === "primary" ? "primary_color" : "secondary_color"]: action.value,
         },
+        templateCustomized: true,
         dirty: true,
       };
     case "SET_LOGO_URL":
@@ -91,12 +96,13 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
     case "REORDER_SECTIONS": {
       const byId = new Map(state.sectionsConfig.map((s) => [s.id, s]));
       const reordered = action.ids.map((id) => byId.get(id)).filter((s): s is SectionConfig => !!s);
-      return { ...state, sectionsConfig: reordered, dirty: true };
+      return { ...state, sectionsConfig: reordered, templateCustomized: true, dirty: true };
     }
     case "TOGGLE_SECTION":
       return {
         ...state,
         sectionsConfig: state.sectionsConfig.map((s) => (s.id === action.id ? { ...s, visible: action.visible } : s)),
+        templateCustomized: true,
         dirty: true,
       };
     case "SET_SERVICE_MEDIA_MODE":
@@ -119,6 +125,22 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
         services: state.services.map((s) => (s.id === action.serviceId ? { ...s, gallery: action.urls } : s)),
         dirty: true,
       };
+    case "APPLY_TEMPLATE": {
+      const template = getCatalogTemplate(action.templateId);
+      return {
+        ...state,
+        business: {
+          ...state.business,
+          template_id: action.templateId,
+          theme: template.isDark ? "premium_dark" : "clean_detail",
+          primary_color: template.palette.primaryColorDefault,
+          secondary_color: template.palette.secondaryColorDefault,
+        },
+        sectionsConfig: template.defaultSectionsConfig,
+        templateCustomized: false,
+        dirty: true,
+      };
+    }
     case "SAVING":
       return { ...state, saving: action.saving, saveError: null };
     case "SAVE_SUCCESS":
@@ -130,14 +152,26 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
   }
 }
 
+function sectionsConfigMatches(a: SectionConfig[], b: SectionConfig[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every((entry, i) => entry.id === b[i]?.id && entry.visible === b[i]?.visible);
+}
+
 export function buildInitialState(
   business: Business,
   services: ServiceRow[],
   sectionsConfig: SectionConfig[]
 ): EditorState {
+  const template = getCatalogTemplate(business.template_id);
+  const templateCustomized =
+    business.primary_color !== template.palette.primaryColorDefault ||
+    business.secondary_color !== template.palette.secondaryColorDefault ||
+    !sectionsConfigMatches(sectionsConfig, template.defaultSectionsConfig);
+
   return {
     businessId: business.id,
     business: {
+      template_id: business.template_id,
       theme: business.theme,
       primary_color: business.primary_color,
       secondary_color: business.secondary_color,
@@ -159,6 +193,7 @@ export function buildInitialState(
       video_url: s.video_url,
     })),
     sectionsConfig,
+    templateCustomized,
     dirty: false,
     saving: false,
     lastSavedAt: null,

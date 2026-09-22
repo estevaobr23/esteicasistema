@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentBusiness } from "@/lib/domain/business";
 import { limitesDoPlano } from "@/lib/domain/plans";
 import { normalizeSectionsConfig, type SectionConfig } from "@/lib/domain/catalog-sections";
+import { getCatalogTemplate } from "@/lib/domain/catalog-templates";
 import type { BusinessDraft, MediaMode, ServiceDraft } from "@/components/dashboard/catalog-editor/CatalogEditorContext";
 
 export type SaveCatalogPayload = {
@@ -37,11 +38,14 @@ export async function salvarCatalogoCompleto(payload: SaveCatalogPayload): Promi
     });
 
     const brandingVideoUrl = limites.permiteVideos ? payload.business.branding_video_url || null : null;
+    const template = getCatalogTemplate(payload.business.template_id);
+    const theme = template.isDark ? "premium_dark" : "clean_detail";
 
     const { error: businessError } = await supabase
       .from("businesses")
       .update({
-        theme: payload.business.theme,
+        template_id: template.id,
+        theme,
         primary_color: payload.business.primary_color,
         secondary_color: payload.business.secondary_color,
         logo_url: payload.business.logo_url || null,
