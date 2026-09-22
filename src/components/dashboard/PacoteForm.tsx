@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { upsertPacote } from "@/app/app/pacotes/actions";
+import { upsertPacote } from "@/app/app/(dashboard)/pacotes/actions";
 import { uploadBusinessMedia } from "@/lib/storage/upload";
 
 type ServiceOption = { id: string; name: string };

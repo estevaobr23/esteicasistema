@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { criarItemPortfolio } from "@/app/app/portfolio/actions";
+import { criarItemPortfolio } from "@/app/app/(dashboard)/portfolio/actions";
 import { uploadBusinessMedia } from "@/lib/storage/upload";
 
 export default function PortfolioForm({ businessId }: { businessId: string }) {

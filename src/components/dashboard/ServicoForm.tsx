@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { upsertServico } from "@/app/app/servicos/actions";
+import { upsertServico } from "@/app/app/(dashboard)/servicos/actions";
 import { uploadBusinessMedia } from "@/lib/storage/upload";
 
 type ServicePriceRow = { vehicle_type: string; price: number };
