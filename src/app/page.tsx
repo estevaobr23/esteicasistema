@@ -1,5 +1,7 @@
 const PRIMARY = "#e11d2a";
 const PRIMARY_DEEP = "#b8121e";
+const LIGHT_BG = "#f2efec"; // off-white dessaturado, nunca branco puro
+const LIGHT_BG_DEEP = "#e8e4e0";
 
 export default function Home() {
   return (
@@ -115,12 +117,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BLOCO TEMÁTICO 5 */}
-      <section className="px-4 py-16">
+      {/* BLOCO TEMÁTICO 5 — abre a faixa clara que vai até Planos */}
+      <section className="px-4 py-16" style={{ backgroundColor: LIGHT_BG }}>
         <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Sua cara, seu controle</p>
-          <h2 className="text-2xl font-bold">Cores da sua marca e as seções que fazem sentido pro seu negócio.</h2>
-          <p className="mt-3 text-sm text-white/60">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-black/40">Sua cara, seu controle</p>
+          <h2 className="text-2xl font-bold text-neutral-900">
+            Cores da sua marca e as seções que fazem sentido pro seu negócio.
+          </h2>
+          <p className="mt-3 text-sm text-neutral-600">
             Defina a cor principal e a de destaque, e escolha quais blocos aparecem no seu catálogo — sem risco de
             bagunçar o layout, porque a estrutura já vem pronta e bonita.
           </p>
@@ -128,7 +132,7 @@ export default function Home() {
       </section>
 
       {/* CONFIANÇA */}
-      <section className="px-4 py-16">
+      <section className="px-4 py-16" style={{ backgroundColor: LIGHT_BG_DEEP }}>
         <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
           {[
             { icon: "🔒", label: "Seus dados isolados" },
@@ -136,7 +140,7 @@ export default function Home() {
             { icon: "⚡", label: "No ar em minutos" },
             { icon: "🎯", label: "Feito só pra detailing" },
           ].map((t) => (
-            <div key={t.label} className="text-center text-xs text-white/60">
+            <div key={t.label} className="text-center text-xs text-neutral-600">
               <div className="mb-1 text-xl">{t.icon}</div>
               {t.label}
             </div>
@@ -145,47 +149,47 @@ export default function Home() {
       </section>
 
       {/* PLANOS */}
-      <section id="planos" className="px-4 py-20" style={{ backgroundColor: "#0a0a0a" }}>
-        <h2 className="mb-2 text-center text-2xl font-bold">Escolha seu plano</h2>
-        <p className="mb-10 text-center text-sm text-white/50">
+      <section id="planos" className="px-4 py-20" style={{ backgroundColor: LIGHT_BG }}>
+        <h2 className="mb-2 text-center text-2xl font-bold text-neutral-900">Escolha seu plano</h2>
+        <p className="mb-10 text-center text-sm text-neutral-500">
           Uma mensalidade de estética esquecida já paga a ferramenta pro ano inteiro.
         </p>
 
         <div className="mx-auto grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
-          {/* ESSENCIAL */}
-          <div className="rounded-2xl border border-white/15 bg-white/[0.03] p-6">
-            <p className="text-sm font-semibold text-white/70">Iniciante</p>
-            <p className="mt-3 text-3xl font-bold">
-              R$47<span className="text-base font-normal text-white/50"> vitalício</span>
+          {/* ESSENCIAL — recuado, translúcido, menos destaque */}
+          <div className="rounded-2xl border border-black/10 bg-black/[0.03] p-6">
+            <p className="text-sm font-semibold text-neutral-500">Iniciante</p>
+            <p className="mt-3 text-3xl font-bold text-neutral-900">
+              R$47<span className="text-base font-normal text-neutral-400"> vitalício</span>
             </p>
-            <p className="text-xs text-white/40">pagamento único · sem mensalidade</p>
+            <p className="text-xs text-neutral-400">pagamento único · sem mensalidade</p>
 
             <ul className="mt-6 space-y-2 text-left text-sm">
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Até 3 serviços cadastrados
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Até 3 serviços cadastrados
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Preço por tipo de veículo
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Preço por tipo de veículo
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> WhatsApp com contexto
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> WhatsApp com contexto
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Horários e paleta da marca
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Horários e paleta da marca
               </li>
-              <li className="flex items-center gap-2 text-white/40">
+              <li className="flex items-center gap-2 text-neutral-400">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Antes e depois
               </li>
-              <li className="flex items-center gap-2 text-white/40">
+              <li className="flex items-center gap-2 text-neutral-400">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Galeria de fotos e vídeos
               </li>
-              <li className="flex items-center gap-2 text-white/40">
+              <li className="flex items-center gap-2 text-neutral-400">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Pacotes e avaliações
               </li>
-              <li className="flex items-center gap-2 text-white/40">
+              <li className="flex items-center gap-2 text-neutral-400">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Analytics
               </li>
@@ -194,10 +198,10 @@ export default function Home() {
             <PlanCTA label="Quero o Iniciante" />
           </div>
 
-          {/* PROFISSIONAL */}
+          {/* PROFISSIONAL — card branco, destacado, "Mais escolhido" */}
           <div
-            className="relative rounded-2xl border-2 p-6"
-            style={{ borderColor: PRIMARY, backgroundColor: "#141414" }}
+            className="relative rounded-2xl border-2 bg-white p-6 shadow-xl"
+            style={{ borderColor: PRIMARY }}
           >
             <span
               className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white"
@@ -205,39 +209,39 @@ export default function Home() {
             >
               ⭐ Mais escolhido
             </span>
-            <p className="text-sm font-semibold text-white/70">Profissional</p>
-            <p className="mt-3 text-3xl font-bold">
-              R$97<span className="text-base font-normal text-white/50"> vitalício</span>
+            <p className="text-sm font-semibold text-neutral-500">Profissional</p>
+            <p className="mt-3 text-3xl font-bold text-neutral-900">
+              R$97<span className="text-base font-normal text-neutral-400"> vitalício</span>
             </p>
-            <p className="text-xs text-white/40">pagamento único · sem mensalidade</p>
+            <p className="text-xs text-neutral-400">pagamento único · sem mensalidade</p>
 
             <ul className="mt-6 space-y-2 text-left text-sm">
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Serviços ilimitados
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Serviços ilimitados
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Preço por tipo de veículo
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Preço por tipo de veículo
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> WhatsApp com contexto
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> WhatsApp com contexto
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Horários e paleta da marca
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Horários e paleta da marca
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Antes e depois
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Antes e depois
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Galeria de fotos e vídeos por serviço
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Galeria de fotos e vídeos por serviço
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Pacotes e avaliações de clientes
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Pacotes e avaliações de clientes
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Analytics de visitantes
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Analytics de visitantes
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Sem marca d&apos;água
+              <li className="flex items-center gap-2 text-neutral-800">
+                <span className="text-emerald-600">✓</span> Sem marca d&apos;água
               </li>
             </ul>
 
@@ -323,8 +327,9 @@ function PlanCTA({ label, highlight }: { label: string; highlight?: boolean }) {
         type="button"
         disabled
         title="Checkout em configuração — em breve disponível"
-        className="block w-full cursor-not-allowed rounded-lg py-3 text-center text-sm font-semibold text-white/50"
-        style={{ backgroundColor: highlight ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.06)" }}
+        className={`block w-full cursor-not-allowed rounded-lg py-3 text-center text-sm font-semibold ${
+          highlight ? "bg-neutral-900/5 text-neutral-400" : "bg-black/5 text-neutral-400"
+        }`}
       >
         {label} (em breve)
       </button>
