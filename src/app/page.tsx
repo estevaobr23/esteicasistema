@@ -233,16 +233,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TANGIBILIZAÇÃO 7 — Mini VSL: o sistema por dentro — fundo escuro (primária) */}
-      <section className="px-4 py-16" style={{ backgroundColor: PRIMARY_DEEP }}>
+      {/* TANGIBILIZAÇÃO 7 — Mini VSL: o sistema por dentro — bloco branco, vídeo 9:16 */}
+      <section className="px-4 py-16" style={{ backgroundColor: "#ffffff" }}>
         <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">Veja funcionando</p>
-          <h2 className="text-2xl font-bold">O sistema por dentro, em menos de 1 minuto.</h2>
-          <p className="mt-3 text-sm text-white/80">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-black/40">Veja funcionando</p>
+          <h2 className="text-2xl font-bold text-neutral-900">O sistema por dentro, em menos de 1 minuto.</h2>
+          <p className="mt-3 text-sm text-neutral-600">
             Do preenchimento à publicação: veja como fica simples montar seu catálogo e como ele aparece pro seu
             cliente.
           </p>
-          <div className="mx-auto mt-8 aspect-video max-w-lg overflow-hidden rounded-2xl border border-white/20 bg-black/30">
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[320px] overflow-hidden rounded-2xl border border-black/10 bg-neutral-100 shadow-lg">
             <video
               src="/videos/sections/mini-vsl-sistema.mp4"
               poster="/images/sections/mini-vsl-poster.png"
