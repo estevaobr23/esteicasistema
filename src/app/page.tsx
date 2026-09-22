@@ -39,17 +39,49 @@ export default function Home() {
 
       {/* RECURSOS */}
       <section id="recursos" className="bg-[#141414] px-4 py-16">
-        <h2 className="mb-10 text-center text-2xl font-bold">O que você configura em minutos</h2>
+        <h2 className="mb-10 text-center text-2xl font-bold">O que muda no seu dia a dia</h2>
         <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: "🚗", title: "Serviços prontos", desc: "12 serviços de detailing já cadastrados, só marcar." },
-            { icon: "💰", title: "Preço por veículo", desc: "Hatch, sedan, SUV e picape — cada um com seu valor." },
-            { icon: "📸", title: "Antes e depois", desc: "Slider interativo com os resultados do seu trabalho." },
-            { icon: "💬", title: "WhatsApp com contexto", desc: "O cliente chama já dizendo o que quer e quanto viu." },
-            { icon: "🖼️", title: "Galeria por serviço", desc: "Suba várias fotos do trabalho em cada serviço." },
-            { icon: "🎬", title: "Vídeos", desc: "Mostre o processo ou o resultado em vídeo, direto no catálogo." },
-            { icon: "🎨", title: "Paleta da sua marca", desc: "Cor principal e de destaque do jeito que você atende." },
-            { icon: "👁️", title: "Seções sob controle", desc: "Mostre ou esconda cada bloco do catálogo quando quiser." },
+            {
+              icon: "🚫",
+              title: "Chega de repetir preço",
+              desc: "Cansado de digitar a mesma tabela toda vez que alguém chama? Seu catálogo responde por você.",
+            },
+            {
+              icon: "✨",
+              title: "Parece um site de verdade",
+              desc: "Nada de fotos soltas no WhatsApp. Seu cliente abre um catálogo profissional, com a cara da sua marca.",
+            },
+            {
+              icon: "💬",
+              title: "Cliente chega sabendo o que quer",
+              desc: "O WhatsApp chega com o serviço, o veículo e o preço já escritos. Você só confirma o horário.",
+            },
+            {
+              icon: "📸",
+              title: "Seus resultados vendem por você",
+              desc: "Antes e depois, fotos e vídeo do trabalho — o cliente vê a qualidade antes de perguntar.",
+            },
+            {
+              icon: "🔄",
+              title: "Sempre atualizado, nunca mais reimpresso",
+              desc: "Mudou o preço? Edita na hora. O catálogo já sai certo pro próximo cliente.",
+            },
+            {
+              icon: "🚗",
+              title: "Preço por tipo de veículo",
+              desc: "Hatch, sedan, SUV, picape — cada um com o valor certo, sem confusão.",
+            },
+            {
+              icon: "⚡",
+              title: "No ar em minutos",
+              desc: "Sem programar, sem contratar ninguém. Você preenche, publica e já pode divulgar.",
+            },
+            {
+              icon: "🔗",
+              title: "Um link só pra tudo",
+              desc: "Coloca na bio do Instagram, manda no status, deixa fixado no WhatsApp Business — um único link pra vida toda.",
+            },
           ].map((r) => (
             <div key={r.title} className="rounded-xl border border-white/10 bg-[#0a0a0a] p-4 text-center">
               <div className="mb-2 text-2xl">{r.icon}</div>
