@@ -148,48 +148,56 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PLANOS */}
-      <section id="planos" className="px-4 py-20" style={{ backgroundColor: LIGHT_BG }}>
-        <h2 className="mb-2 text-center text-2xl font-bold text-neutral-900">Escolha seu plano</h2>
-        <p className="mb-10 text-center text-sm text-neutral-500">
+      {/* PLANOS — fundo preto; só o card Profissional é branco */}
+      <section id="planos" className="px-4 py-20" style={{ backgroundColor: "#0a0a0a" }}>
+        <h2 className="mb-2 text-center text-2xl font-bold text-white">Escolha seu plano</h2>
+        <p className="mb-10 text-center text-sm text-white/50">
           Uma mensalidade de estética esquecida já paga a ferramenta pro ano inteiro.
         </p>
 
         <div className="mx-auto grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
-          {/* ESSENCIAL — recuado, translúcido, menos destaque */}
-          <div className="rounded-2xl border border-black/10 bg-black/[0.03] p-6">
-            <p className="text-sm font-semibold text-neutral-500">Iniciante</p>
-            <p className="mt-3 text-3xl font-bold text-neutral-900">
-              R$47<span className="text-base font-normal text-neutral-400"> vitalício</span>
+          {/* ESSENCIAL — preto texturizado, recuado, menos destaque */}
+          <div
+            className="rounded-2xl border border-white/10 p-6"
+            style={{
+              backgroundColor: "#131313",
+              backgroundImage:
+                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)",
+              backgroundSize: "14px 14px",
+            }}
+          >
+            <p className="text-sm font-semibold text-white/60">Iniciante</p>
+            <p className="mt-3 text-3xl font-bold text-white">
+              R$47<span className="text-base font-normal text-white/40"> vitalício</span>
             </p>
-            <p className="text-xs text-neutral-400">pagamento único · sem mensalidade</p>
+            <p className="text-xs text-white/40">pagamento único · sem mensalidade</p>
 
             <ul className="mt-6 space-y-2 text-left text-sm">
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Até 3 serviços cadastrados
+              <li className="flex items-center gap-2 text-white/80">
+                <span className="text-emerald-500">✓</span> Até 3 serviços cadastrados
               </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Preço por tipo de veículo
+              <li className="flex items-center gap-2 text-white/80">
+                <span className="text-emerald-500">✓</span> Preço por tipo de veículo
               </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> WhatsApp com contexto
+              <li className="flex items-center gap-2 text-white/80">
+                <span className="text-emerald-500">✓</span> WhatsApp com contexto
               </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Horários e paleta da marca
+              <li className="flex items-center gap-2 text-white/80">
+                <span className="text-emerald-500">✓</span> Horários e paleta da marca
               </li>
-              <li className="flex items-center gap-2 text-neutral-400">
+              <li className="flex items-center gap-2 text-white/40">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Antes e depois
               </li>
-              <li className="flex items-center gap-2 text-neutral-400">
+              <li className="flex items-center gap-2 text-white/40">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Galeria de fotos e vídeos
               </li>
-              <li className="flex items-center gap-2 text-neutral-400">
+              <li className="flex items-center gap-2 text-white/40">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Pacotes e avaliações
               </li>
-              <li className="flex items-center gap-2 text-neutral-400">
+              <li className="flex items-center gap-2 text-white/40">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Analytics
               </li>
@@ -328,7 +336,7 @@ function PlanCTA({ label, highlight }: { label: string; highlight?: boolean }) {
         disabled
         title="Checkout em configuração — em breve disponível"
         className={`block w-full cursor-not-allowed rounded-lg py-3 text-center text-sm font-semibold ${
-          highlight ? "bg-neutral-900/5 text-neutral-400" : "bg-black/5 text-neutral-400"
+          highlight ? "bg-neutral-900/5 text-neutral-400" : "bg-white/10 text-white/50"
         }`}
       >
         {label} (em breve)
