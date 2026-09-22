@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catálogo-Site para Estética Automotiva
 
-## Getting Started
+Plataforma multi-tenant onde donos de estética automotiva criam, sem código,
+um catálogo-site público (`/[slug]`) para substituir o fluxo manual de
+responder preço e serviço pelo WhatsApp.
 
-First, run the development server:
+Stack: Next.js (App Router) + TypeScript + Tailwind + Supabase (Postgres,
+Auth, Storage, RLS).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Setup local
+
+### 1. Variáveis de ambiente
+
+Copie `.env.local` (já existe neste repo, fora do git) e preencha:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://mretirumxiqnrahumipt.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<já preenchida>
+
+# Painel Supabase > Project Settings > API Keys > service_role (secret)
+# NUNCA prefixar com NEXT_PUBLIC_ — essa chave ignora RLS totalmente.
+SUPABASE_SERVICE_ROLE_KEY=
+
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_PRODUCT_NAME=Vitrine Detail
+
+# Preenchido quando o produto for criado na Cakto (etapa final)
+CAKTO_WEBHOOK_SECRET=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A `SUPABASE_SERVICE_ROLE_KEY` é obrigatória para o onboarding funcionar: é ela
+que permite ao servidor conferir a compra aprovada (tabela `purchases`, que
+tem RLS deny-all) antes de liberar a criação do negócio.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Instalar e rodar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Abra http://localhost:3000.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Banco de dados
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+O schema já está aplicado no projeto Supabase (`mretirumxiqnrahumipt`). A
+migration fonte está em `supabase/migrations/0001_init.sql` — caso precise
+recriar o banco em outro projeto, aplique esse arquivo via SQL editor ou
+`supabase db push`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Como testar o fluxo de acesso sem uma compra real na Cakto
 
-## Deploy on Vercel
+Antes do produto existir na Cakto, simule uma compra aprovada direto no
+banco:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```sql
+insert into purchases (email, plano, transaction_id, status, valor)
+values ('seu-email-de-teste@gmail.com', 'profissional', 'test-txn-001', 'aprovado', 97.00);
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Depois crie a conta em `/cadastro` com esse mesmo e-mail — o onboarding vai
+reconhecer a compra e liberar o negócio automaticamente.
+
+> Se o Supabase Auth exigir confirmação de e-mail e você não tiver SMTP
+> configurado em dev, confirme manualmente via SQL:
+> `update auth.users set email_confirmed_at = now() where email = '...';`
+
+## Estrutura de rotas
+
+```
+/                        landing (venda da plataforma)
+/login, /cadastro        auth — cadastro só funciona pós-compra
+/app/onboarding          portão que valida a compra + wizard de 5 passos
+/app/dashboard           painel do dono da estética (route group "(dashboard)")
+/app/servicos, /pacotes,
+/portfolio, /horarios,
+/avaliacoes, /personalizar,
+/configuracoes, /analytics
+/[slug]                  catálogo público (sem autenticação)
+/api/events               tracking de analytics (fire-and-forget)
+```
+
+`/app/onboarding` fica **fora** do route group `(dashboard)` de propósito:
+o layout do dashboard chama `getCurrentBusiness()`, que redireciona para o
+onboarding quando o usuário ainda não tem negócio — se o onboarding
+estivesse sob esse mesmo layout, isso causaria um loop infinito de redirect.
+
+## Planos
+
+- **Essencial** (R$47 vitalício): até 3 serviços ativos, sem antes/depois, sem
+  pacotes, sem analytics, com marca "criado com [produto]" no rodapé do
+  catálogo público.
+- **Profissional** (R$97 vitalício): tudo ilimitado, sem marca d'água.
+
+Limites definidos em `src/lib/domain/plans.ts` e reforçados nas Server
+Actions (nunca só na UI).
+
+## Próximos passos (fora do MVP atual)
+
+- Criar o produto na Cakto (skill `criar-produto-cakto`) e preencher os IDs
+  de oferta reais em `supabase/functions/cakto-webhook/index.ts` (a publicar)
+  e `CAKTO_WEBHOOK_SECRET`.
+- Landing final com tangibilização (prints reais do produto).
