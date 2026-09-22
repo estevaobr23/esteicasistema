@@ -5,7 +5,7 @@ import type { Database } from "@/lib/supabase/types";
 import CatalogPresentation from "@/components/catalog/CatalogPresentation";
 import { limitesDoPlano } from "@/lib/domain/plans";
 import { useCatalogEditorState } from "./CatalogEditorContext";
-import TemplatePanel from "./panels/TemplatePanel";
+import TemplateSelectorScreen from "./TemplateSelectorScreen";
 import TextosPanel from "./panels/TextosPanel";
 import SecoesPanel from "./panels/SecoesPanel";
 import ServicosPanel from "./panels/ServicosPanel";
@@ -28,7 +28,6 @@ type AvailabilitySlot = Database["public"]["Tables"]["availability_slots"]["Row"
 type Review = Database["public"]["Tables"]["reviews"]["Row"];
 
 const TABS = [
-  { key: "template", label: "Template" },
   { key: "textos", label: "Textos" },
   { key: "secoes", label: "Seções" },
   { key: "servicos", label: "Serviços" },
@@ -55,7 +54,8 @@ export default function CatalogEditorShell({
 }) {
   const state = useCatalogEditorState();
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
-  const [tab, setTab] = useState<TabKey>("template");
+  const [tab, setTab] = useState<TabKey>("textos");
+  const [showTemplateScreen, setShowTemplateScreen] = useState(!state.templateCustomized);
   const limites = limitesDoPlano(business.plano as "essencial" | "profissional");
 
   const previewBusiness: Business = {
@@ -85,11 +85,24 @@ export default function CatalogEditorShell({
     };
   });
 
+  if (showTemplateScreen) {
+    return <TemplateSelectorScreen onContinue={() => setShowTemplateScreen(false)} />;
+  }
+
   return (
     <div className="flex h-[calc(100vh-4.25rem)] min-w-0 flex-col overflow-x-hidden sm:h-screen">
       <div className="flex items-center justify-between border-b border-neutral-900 px-4 py-4 sm:px-6">
         <h1 className="text-xl font-semibold text-white">Catálogo</h1>
-        <SaveBar />
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setShowTemplateScreen(true)}
+            className="rounded-lg border border-neutral-800 px-3 py-2 text-sm font-medium text-neutral-300"
+          >
+            Trocar template
+          </button>
+          <SaveBar />
+        </div>
       </div>
 
       <div className="flex min-w-0 flex-1 overflow-hidden">
@@ -110,7 +123,6 @@ export default function CatalogEditorShell({
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-            {tab === "template" && <TemplatePanel />}
             {tab === "textos" && <TextosPanel />}
             {tab === "secoes" && <SecoesPanel permiteOcultarSecoes={limites.permiteOcultarSecoes} />}
             {tab === "servicos" && (
