@@ -2,17 +2,18 @@ import Link from "next/link";
 import { getCurrentBusiness } from "@/lib/domain/business";
 import { limitesDoPlano } from "@/lib/domain/plans";
 import { signOut } from "@/app/(auth)/actions";
+import BottomNav from "@/components/dashboard/BottomNav";
 
 const NAV_ITEMS = [
-  { href: "/app/dashboard", label: "Início" },
-  { href: "/app/servicos", label: "Serviços" },
-  { href: "/app/pacotes", label: "Pacotes", plano: "profissional" as const },
-  { href: "/app/portfolio", label: "Portfólio", plano: "profissional" as const },
-  { href: "/app/horarios", label: "Horários" },
-  { href: "/app/avaliacoes", label: "Avaliações", plano: "profissional" as const },
-  { href: "/app/analytics", label: "Analytics", plano: "profissional" as const },
-  { href: "/app/personalizar", label: "Personalizar" },
-  { href: "/app/configuracoes", label: "Configurações" },
+  { href: "/app/dashboard", label: "Início", navLabel: "Início", icon: "home" as const },
+  { href: "/app/servicos", label: "Serviços", navLabel: "Serviços", icon: "wrench" as const },
+  { href: "/app/pacotes", label: "Pacotes", navLabel: "Pacotes", icon: "box" as const, plano: "profissional" as const },
+  { href: "/app/portfolio", label: "Portfólio", navLabel: "Portfólio", icon: "image" as const, plano: "profissional" as const },
+  { href: "/app/horarios", label: "Horários", navLabel: "Horários", icon: "clock" as const },
+  { href: "/app/avaliacoes", label: "Avaliações", navLabel: "Avaliações", icon: "star" as const, plano: "profissional" as const },
+  { href: "/app/analytics", label: "Analytics", navLabel: "Analytics", icon: "chart" as const, plano: "profissional" as const },
+  { href: "/app/personalizar", label: "Personalizar", navLabel: "Visual", icon: "palette" as const },
+  { href: "/app/configuracoes", label: "Configurações", navLabel: "Config", icon: "settings" as const },
 ];
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -51,19 +52,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </form>
       </aside>
 
-      <div className="flex-1 pb-20 sm:pb-0">{children}</div>
+      <div className="flex-1 pb-[calc(4.25rem+env(safe-area-inset-bottom))] sm:pb-0">{children}</div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 flex overflow-x-auto border-t border-neutral-900 bg-neutral-950/95 backdrop-blur sm:hidden">
-        {items.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex-1 whitespace-nowrap px-3 py-3 text-center text-[11px] text-neutral-400"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+      <BottomNav items={items} />
     </div>
   );
 }
