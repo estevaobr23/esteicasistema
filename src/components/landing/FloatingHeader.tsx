@@ -1,37 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const PRIMARY = "#e11d2a";
 
 export default function FloatingHeader() {
-  const [visible, setVisible] = useState(true);
   const [capsule, setCapsule] = useState(false);
-  const lastY = useRef(0);
 
   useEffect(() => {
-    lastY.current = window.scrollY;
     let ticking = false;
 
     function update() {
-      const y = window.scrollY;
-      const diff = y - lastY.current;
-      const pastThreshold = y > 40;
-
-      setCapsule(pastThreshold);
-
-      // Ignora micro-oscilações (bounce do navegador, trackpad impreciso).
-      if (Math.abs(diff) > 4) {
-        if (!pastThreshold) {
-          setVisible(true); // sempre visível perto do topo
-        } else if (diff > 0) {
-          setVisible(true); // rolando para baixo -> mostra (cápsula)
-        } else {
-          setVisible(false); // rolando para cima -> esconde
-        }
-        lastY.current = y;
-      }
-
+      setCapsule(window.scrollY > 40);
       ticking = false;
     }
 
@@ -47,10 +27,7 @@ export default function FloatingHeader() {
   }, []);
 
   return (
-    <header
-      className="fixed inset-x-0 top-0 z-30 flex justify-center transition-transform duration-300"
-      style={{ transform: visible ? "translateY(0)" : "translateY(-120%)" }}
-    >
+    <header className="fixed inset-x-0 top-0 z-30 flex justify-center">
       <div
         className={`flex items-center justify-center transition-all duration-300 ${
           capsule
