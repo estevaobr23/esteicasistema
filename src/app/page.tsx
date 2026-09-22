@@ -47,7 +47,7 @@ export default function Home() {
       {/* RECURSOS */}
       <section id="recursos" className="bg-[#141414] px-4 py-16">
         <h2 className="mb-10 text-center text-2xl font-bold">O que você configura em minutos</h2>
-        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { icon: "🚗", title: "Serviços prontos", desc: "12 serviços de detailing já cadastrados, só marcar." },
             { icon: "💰", title: "Preço por veículo", desc: "Hatch, sedan, SUV e picape — cada um com seu valor." },
