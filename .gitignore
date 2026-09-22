@@ -39,6 +39,9 @@ yarn-error.log*
 # claude code session state
 /.claude/
 
+# arquivos de rascunho/geração de imagem (contact sheets, etc)
+/tmp/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

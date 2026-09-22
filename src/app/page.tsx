@@ -44,47 +44,66 @@ export default function Home() {
           {[
             {
               icon: "🚫",
+              image: "/images/day-to-day/stop-repeating-prices.png",
+              alt: "Etiqueta de preço digital substituindo uma tabela impressa",
               title: "Chega de repetir preço",
               desc: "Cansado de digitar a mesma tabela toda vez que alguém chama? Seu catálogo responde por você.",
             },
             {
               icon: "✨",
+              image: "/images/day-to-day/professional-catalog.png",
+              alt: "Catálogo profissional em um celular",
               title: "Parece um site de verdade",
               desc: "Nada de fotos soltas no WhatsApp. Seu cliente abre um catálogo profissional, com a cara da sua marca.",
             },
             {
               icon: "💬",
+              image: "/images/day-to-day/qualified-whatsapp-lead.png",
+              alt: "Mensagem de cliente com serviço, veículo e preço confirmados",
               title: "Cliente chega sabendo o que quer",
               desc: "O WhatsApp chega com o serviço, o veículo e o preço já escritos. Você só confirma o horário.",
             },
             {
               icon: "📸",
+              image: "/images/day-to-day/before-after-results.png",
+              alt: "Comparação visual de antes e depois em uma porta de carro",
               title: "Seus resultados vendem por você",
               desc: "Antes e depois, fotos e vídeo do trabalho — o cliente vê a qualidade antes de perguntar.",
             },
             {
               icon: "🔄",
+              image: "/images/day-to-day/instant-updates.png",
+              alt: "Catálogo atualizado instantaneamente",
               title: "Sempre atualizado, nunca mais reimpresso",
               desc: "Mudou o preço? Edita na hora. O catálogo já sai certo pro próximo cliente.",
             },
             {
               icon: "🚗",
+              image: "/images/day-to-day/vehicle-price.png",
+              alt: "Preços para diferentes tipos de veículo",
               title: "Preço por tipo de veículo",
               desc: "Hatch, sedan, SUV, picape — cada um com o valor certo, sem confusão.",
             },
             {
               icon: "⚡",
+              image: "/images/day-to-day/publish-fast.png",
+              alt: "Catálogo publicado rapidamente",
               title: "No ar em minutos",
               desc: "Sem programar, sem contratar ninguém. Você preenche, publica e já pode divulgar.",
             },
             {
               icon: "🔗",
+              image: "/images/day-to-day/one-link.png",
+              alt: "Um link conectando catálogo e canais de atendimento",
               title: "Um link só pra tudo",
               desc: "Coloca na bio do Instagram, manda no status, deixa fixado no WhatsApp Business — um único link pra vida toda.",
             },
           ].map((r) => (
             <div key={r.title} className="rounded-xl border border-white/10 bg-[#0a0a0a] p-4 text-center">
-              <div className="mb-2 text-2xl">{r.icon}</div>
+              <div className="mb-2 flex h-[72px] items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={r.image} alt={r.alt} className="h-[72px] w-[72px] object-contain" />
+              </div>
               <p className="text-sm font-semibold">{r.title}</p>
               <p className="mt-1 text-xs text-white/50">{r.desc}</p>
             </div>
@@ -92,65 +111,168 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BLOCO TEMÁTICO 1 */}
+      {/* TANGIBILIZAÇÃO 1 — Catálogo geral */}
       <section className="px-4 py-16">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Chega de repetir</p>
-          <h2 className="text-2xl font-bold">
-            &ldquo;Quanto custa pra SUV?&rdquo; Seu cliente responde sozinho.
-          </h2>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Seu catálogo</p>
+          <h2 className="text-2xl font-bold">Seu catálogo, do jeito que seu cliente vê.</h2>
           <p className="mt-3 text-sm text-white/60">
-            Ele seleciona o veículo dele e o preço certo aparece na hora. Você para de digitar a mesma tabela de
-            preço todo dia.
+            Um site profissional, com a cara da sua marca, pronto pra receber quem chega pelo link — sem parecer
+            fotos soltas no WhatsApp.
           </p>
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-[#141414]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/sections/catalogo-geral.png"
+              alt="Visão geral do catálogo público, com o hero e a lista de serviços"
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </section>
 
-      {/* BLOCO TEMÁTICO 2 — fundo escuro (primária) */}
+      {/* TANGIBILIZAÇÃO 2 — Preço por veículo — fundo escuro (primária) */}
+      <section className="px-4 py-16" style={{ backgroundColor: PRIMARY_DEEP }}>
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">Chega de repetir</p>
+          <h2 className="text-2xl font-bold">
+            &ldquo;Quanto custa pra SUV?&rdquo; Seu cliente responde sozinho.
+          </h2>
+          <p className="mt-3 text-sm text-white/80">
+            Ele seleciona o veículo dele e o preço certo aparece na hora. Você para de digitar a mesma tabela de
+            preço todo dia.
+          </p>
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/20 bg-black/20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/sections/preco-por-veiculo.png"
+              alt="Seletor de tipo de veículo mudando o preço exibido no catálogo"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* TANGIBILIZAÇÃO 3 — WhatsApp personalizado */}
+      <section className="bg-[#141414] px-4 py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Lead qualificado</p>
+          <h2 className="text-2xl font-bold">O WhatsApp chega pronto pra fechar.</h2>
+          <p className="mt-3 text-sm text-white/60">
+            A mensagem já vem com o serviço, o veículo e o preço que ele viu. Você só confirma o horário — sem
+            interrogatório.
+          </p>
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/sections/whatsapp-personalizado.png"
+              alt="Mensagem de WhatsApp pré-preenchida com serviço, veículo e preço"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* TANGIBILIZAÇÃO 4 — Antes e depois — fundo escuro (primária) */}
       <section className="px-4 py-16" style={{ backgroundColor: PRIMARY_DEEP }}>
         <div className="mx-auto max-w-2xl text-center">
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">Prova visual</p>
           <h2 className="text-2xl font-bold">Seus resultados falam antes de você precisar falar.</h2>
           <p className="mt-3 text-sm text-white/80">
-            Antes e depois com slider, separados por categoria. O cliente compara com o dedo, sem sair do catálogo.
+            Antes e depois com slider interativo, separados por categoria. O cliente compara com o dedo, sem sair
+            do catálogo.
           </p>
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/20 bg-black/20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/sections/antes-depois.png"
+              alt="Slider interativo comparando o antes e o depois de um serviço"
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </section>
 
-      {/* BLOCO TEMÁTICO 3 */}
+      {/* TANGIBILIZAÇÃO 5 — Portfólio / galeria */}
+      <section className="px-4 py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Todo o seu trabalho</p>
+          <h2 className="text-2xl font-bold">Todo o seu portfólio, num lugar só.</h2>
+          <p className="mt-3 text-sm text-white/60">
+            Suba quantas fotos quiser em cada serviço. O cliente rola e vê a qualidade do seu trabalho antes de
+            chamar.
+          </p>
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-[#141414]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/sections/portfolio-galeria.png"
+              alt="Galeria de fotos de um serviço no catálogo público"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* TANGIBILIZAÇÃO 6 — Provas sociais */}
       <section className="bg-[#141414] px-4 py-16">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Sem perder horário</p>
-          <h2 className="text-2xl font-bold">Mostre os horários que você tem livre — sem agenda complicada.</h2>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Confiança</p>
+          <h2 className="text-2xl font-bold">O que seus clientes dizem, bem na frente de quem chega.</h2>
           <p className="mt-3 text-sm text-white/60">
-            Você configura uma vez por semana. O cliente vê e já chama no WhatsApp com o horário de interesse.
+            Avaliações com estrelas e comentário, cadastradas por você em segundos — reforçando confiança antes do
+            primeiro contato.
           </p>
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/sections/provas-sociais.png"
+              alt="Avaliações de clientes com estrelas e comentários no catálogo"
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </section>
 
-      {/* BLOCO TEMÁTICO 4 — fundo escuro (primária) */}
+      {/* TANGIBILIZAÇÃO 7 — Mini VSL: o sistema por dentro — fundo escuro (primária) */}
       <section className="px-4 py-16" style={{ backgroundColor: PRIMARY_DEEP }}>
         <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">Toda a prova, num lugar só</p>
-          <h2 className="text-2xl font-bold">Galeria de fotos por serviço e vídeo do processo, sem sair do link.</h2>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">Veja funcionando</p>
+          <h2 className="text-2xl font-bold">O sistema por dentro, em menos de 1 minuto.</h2>
           <p className="mt-3 text-sm text-white/80">
-            Além do antes/depois, suba quantas fotos quiser em cada serviço e mostre um vídeo do processo ou do
-            resultado. O cliente vê o trabalho de verdade antes de chamar.
+            Do preenchimento à publicação: veja como fica simples montar seu catálogo e como ele aparece pro seu
+            cliente.
           </p>
+          <div className="mx-auto mt-8 aspect-video max-w-lg overflow-hidden rounded-2xl border border-white/20 bg-black/30">
+            <video
+              src="/videos/sections/mini-vsl-sistema.mp4"
+              poster="/images/sections/mini-vsl-poster.png"
+              controls
+              playsInline
+              className="h-full w-full object-cover"
+            >
+              Seu navegador não suporta vídeo. Veja o sistema no link do catálogo.
+            </video>
+          </div>
         </div>
       </section>
 
-      {/* BLOCO TEMÁTICO 5 — abre a faixa clara que vai até Planos */}
+      {/* TANGIBILIZAÇÃO 8 — Personalização — abre a faixa clara que vai até Planos */}
       <section className="px-4 py-16" style={{ backgroundColor: LIGHT_BG }}>
         <div className="mx-auto max-w-2xl text-center">
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-black/40">Sua cara, seu controle</p>
-          <h2 className="text-2xl font-bold text-neutral-900">
-            Cores da sua marca e as seções que fazem sentido pro seu negócio.
-          </h2>
+          <h2 className="text-2xl font-bold text-neutral-900">Sua marca, do seu jeito.</h2>
           <p className="mt-3 text-sm text-neutral-600">
             Defina a cor principal e a de destaque, e escolha quais blocos aparecem no seu catálogo — sem risco de
             bagunçar o layout, porque a estrutura já vem pronta e bonita.
           </p>
+          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/sections/personalizacao-marca.png"
+              alt="Painel de personalização com seletor de cores e templates"
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </section>
 
