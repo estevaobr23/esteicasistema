@@ -9,7 +9,7 @@ const BUCKET = "business-media";
  */
 export async function uploadBusinessMedia(
   businessId: string,
-  pasta: "logo" | "capa" | "servicos" | "portfolio" | "pacotes",
+  pasta: "logo" | "capa" | "servicos" | "portfolio" | "pacotes" | "galeria",
   file: File
 ): Promise<string> {
   const supabase = createClient();

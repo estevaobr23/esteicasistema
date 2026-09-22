@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { href: "/app/horarios", label: "Horários", navLabel: "Horários", icon: "clock" as const },
   { href: "/app/avaliacoes", label: "Avaliações", navLabel: "Avaliações", icon: "star" as const, plano: "profissional" as const },
   { href: "/app/analytics", label: "Analytics", navLabel: "Analytics", icon: "chart" as const, plano: "profissional" as const },
-  { href: "/app/personalizar", label: "Personalizar", navLabel: "Visual", icon: "palette" as const },
+  { href: "/app/catalogo", label: "Catálogo", navLabel: "Catálogo", icon: "palette" as const },
   { href: "/app/configuracoes", label: "Configurações", navLabel: "Config", icon: "settings" as const },
 ];
 
