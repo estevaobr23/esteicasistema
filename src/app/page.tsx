@@ -3,7 +3,6 @@ import FloatingHeader from "@/components/landing/FloatingHeader";
 const PRIMARY = "#e11d2a";
 const PRIMARY_DEEP = "#b8121e";
 const LIGHT_BG = "#f2efec"; // off-white dessaturado, nunca branco puro
-const LIGHT_BG_DEEP = "#e8e4e0";
 
 export default function Home() {
   return (
@@ -272,67 +271,6 @@ export default function Home() {
               alt="Painel de personalização com seletor de cores e templates"
               className="h-full w-full object-cover"
             />
-          </div>
-        </div>
-      </section>
-
-      {/* AGULHADA — método antigo vs Vitrine Detail */}
-      <section className="px-4 py-16" style={{ backgroundColor: LIGHT_BG_DEEP }}>
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-black/40">
-            Chega de fazer do jeito difícil
-          </p>
-          <h2 className="text-2xl font-bold text-neutral-900">
-            Nunca mais use PDF pra vender estética automotiva.
-          </h2>
-
-          <div className="mx-auto mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {/* Jeito antigo */}
-            <div className="rounded-2xl border border-black/10 bg-white/60 p-6 text-left">
-              <p className="mb-4 text-center text-xs font-bold uppercase tracking-wide text-neutral-400">
-                Do jeito antigo
-              </p>
-              <ul className="space-y-3 text-sm">
-                {[
-                  "PDF que ninguém atualiza",
-                  "Preço decorado, repetido toda hora",
-                  "Fotos soltas perdidas no WhatsApp",
-                  "Sem jeito de saber quem visualizou",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-neutral-500">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-600 text-[11px] text-white">
-                      ✕
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Com o Vitrine Detail */}
-            <div
-              className="rounded-2xl border-2 bg-white p-6 text-left shadow-lg"
-              style={{ borderColor: PRIMARY }}
-            >
-              <p className="mb-4 text-center text-xs font-bold uppercase tracking-wide" style={{ color: PRIMARY }}>
-                Com o Vitrine Detail
-              </p>
-              <ul className="space-y-3 text-sm">
-                {[
-                  "Link único, sempre atualizado",
-                  "Preço certo pro veículo, sozinho",
-                  "Antes/depois e portfólio organizados",
-                  "Analytics de quem visitou seu catálogo",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-neutral-800">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[11px] text-white">
-                      ✓
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </div>
       </section>
