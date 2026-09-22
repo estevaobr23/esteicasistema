@@ -89,11 +89,14 @@ export type Database = {
         Row: {
           about: string | null
           address: string | null
+          branding_video_url: string | null
           business_hours: Json | null
           city: string | null
           cover_url: string | null
           created_at: string
           email: string | null
+          headline: string | null
+          highlights: Json
           id: string
           instagram: string | null
           logo_url: string | null
@@ -106,6 +109,7 @@ export type Database = {
           primary_color: string
           published: boolean
           secondary_color: string
+          sections_config: Json
           slug: string
           theme: string
           updated_at: string
@@ -114,11 +118,14 @@ export type Database = {
         Insert: {
           about?: string | null
           address?: string | null
+          branding_video_url?: string | null
           business_hours?: Json | null
           city?: string | null
           cover_url?: string | null
           created_at?: string
           email?: string | null
+          headline?: string | null
+          highlights?: Json
           id?: string
           instagram?: string | null
           logo_url?: string | null
@@ -131,6 +138,7 @@ export type Database = {
           primary_color?: string
           published?: boolean
           secondary_color?: string
+          sections_config?: Json
           slug: string
           theme?: string
           updated_at?: string
@@ -139,11 +147,14 @@ export type Database = {
         Update: {
           about?: string | null
           address?: string | null
+          branding_video_url?: string | null
           business_hours?: Json | null
           city?: string | null
           cover_url?: string | null
           created_at?: string
           email?: string | null
+          headline?: string | null
+          highlights?: Json
           id?: string
           instagram?: string | null
           logo_url?: string | null
@@ -156,6 +167,7 @@ export type Database = {
           primary_color?: string
           published?: boolean
           secondary_color?: string
+          sections_config?: Json
           slug?: string
           theme?: string
           updated_at?: string
@@ -486,7 +498,9 @@ export type Database = {
       services: {
         Row: {
           active: boolean
+          after_image: string | null
           base_price: number | null
+          before_image: string | null
           business_id: string
           category: string | null
           created_at: string
@@ -497,6 +511,7 @@ export type Database = {
           gallery: Json
           id: string
           image_url: string | null
+          media_mode: string
           name: string
           price_type: string
           short_description: string | null
@@ -506,7 +521,9 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          after_image?: string | null
           base_price?: number | null
+          before_image?: string | null
           business_id: string
           category?: string | null
           created_at?: string
@@ -517,6 +534,7 @@ export type Database = {
           gallery?: Json
           id?: string
           image_url?: string | null
+          media_mode?: string
           name: string
           price_type?: string
           short_description?: string | null
@@ -526,7 +544,9 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          after_image?: string | null
           base_price?: number | null
+          before_image?: string | null
           business_id?: string
           category?: string | null
           created_at?: string
@@ -537,6 +557,7 @@ export type Database = {
           gallery?: Json
           id?: string
           image_url?: string | null
+          media_mode?: string
           name?: string
           price_type?: string
           short_description?: string | null
