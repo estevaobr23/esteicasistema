@@ -30,7 +30,7 @@ export default function TemplatePanel() {
     <div className="space-y-6">
       <div>
         <span className="mb-2 block text-sm font-medium text-neutral-300">Template</span>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {TEMPLATES.map((t) => (
             <button
               key={t.id}

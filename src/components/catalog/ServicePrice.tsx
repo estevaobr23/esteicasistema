@@ -1,6 +1,7 @@
 "use client";
 
 import { useVehicle, VEHICLE_LABELS } from "./VehicleSelector";
+import { formatBRL } from "@/lib/format";
 
 type ServicePriceRow = {
   vehicle_type: string;
@@ -8,10 +9,6 @@ type ServicePriceRow = {
   promotional_price: number | null;
   active: boolean;
 };
-
-function formatBRL(value: number): string {
-  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
 
 export function useServicePriceLabel(
   priceType: string,
@@ -53,5 +50,3 @@ export default function ServicePrice({
     </div>
   );
 }
-
-export { formatBRL };

@@ -3,7 +3,7 @@ import { getCurrentBusiness } from "@/lib/domain/business";
 import { createClient } from "@/lib/supabase/server";
 import { limitesDoPlano } from "@/lib/domain/plans";
 import { toggleServicoAtivo, excluirServico, duplicarServico } from "./actions";
-import { formatBRL } from "@/components/catalog/ServicePrice";
+import { formatBRL } from "@/lib/format";
 
 export default async function ServicosPage({
   searchParams,

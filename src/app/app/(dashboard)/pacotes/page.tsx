@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getCurrentBusiness } from "@/lib/domain/business";
 import { createClient } from "@/lib/supabase/server";
 import { togglePacoteAtivo, excluirPacote } from "./actions";
-import { formatBRL } from "@/components/catalog/ServicePrice";
+import { formatBRL } from "@/lib/format";
 
 export default async function PacotesPage({
   searchParams,

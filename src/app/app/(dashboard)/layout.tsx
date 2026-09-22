@@ -52,7 +52,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </form>
       </aside>
 
-      <div className="flex-1 pb-[calc(4.25rem+env(safe-area-inset-bottom))] sm:pb-0">{children}</div>
+      <div className="min-w-0 flex-1 overflow-x-hidden pb-[calc(4.25rem+env(safe-area-inset-bottom))] sm:pb-0">
+        {children}
+      </div>
 
       <BottomNav items={items} />
     </div>

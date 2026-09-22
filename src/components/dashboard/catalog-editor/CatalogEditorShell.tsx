@@ -86,14 +86,14 @@ export default function CatalogEditorShell({
   });
 
   return (
-    <div className="flex h-[calc(100vh-4.25rem)] flex-col sm:h-screen">
+    <div className="flex h-[calc(100vh-4.25rem)] min-w-0 flex-col overflow-x-hidden sm:h-screen">
       <div className="flex items-center justify-between border-b border-neutral-900 px-4 py-4 sm:px-6">
         <h1 className="text-xl font-semibold text-white">Catálogo</h1>
         <SaveBar />
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
-        <div className="flex w-full flex-col overflow-hidden sm:w-[420px] sm:shrink-0 sm:border-r sm:border-neutral-900">
+      <div className="flex min-w-0 flex-1 overflow-hidden">
+        <div className="flex min-w-0 w-full flex-col overflow-hidden sm:w-[420px] sm:shrink-0 sm:border-r sm:border-neutral-900">
           <div className="flex overflow-x-auto border-b border-neutral-900 px-4 sm:px-6">
             {TABS.map((t) => (
               <button
