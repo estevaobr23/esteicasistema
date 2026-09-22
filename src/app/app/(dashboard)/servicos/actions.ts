@@ -53,10 +53,17 @@ export async function upsertServico(formData: FormData) {
     featured,
   };
 
-  let serviceId = id;
+  let serviceId: string | null = null;
 
   if (id) {
-    await supabase.from("services").update(payload).eq("id", id);
+    const { data } = await supabase
+      .from("services")
+      .update(payload)
+      .eq("id", id)
+      .eq("business_id", business.id)
+      .select("id")
+      .single();
+    serviceId = data?.id ?? null;
   } else {
     const { data } = await supabase.from("services").insert(payload).select("id").single();
     serviceId = data?.id ?? null;
@@ -76,7 +83,8 @@ export async function upsertServico(formData: FormData) {
       await supabase
         .from("services")
         .update({ base_price: base ? Number(base) : null })
-        .eq("id", serviceId);
+        .eq("id", serviceId)
+        .eq("business_id", business.id);
     }
   }
 

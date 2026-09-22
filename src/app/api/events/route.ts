@@ -26,6 +26,16 @@ export async function POST(request: Request) {
   }
 
   const admin = createAdminClient();
+
+  const { data: business } = await admin
+    .from("businesses")
+    .select("id")
+    .eq("id", business_id)
+    .eq("published", true)
+    .maybeSingle();
+
+  if (!business) return NextResponse.json({ ok: false }, { status: 200 });
+
   const { error } = await admin.from("analytics_events").insert({
     business_id,
     event_type,

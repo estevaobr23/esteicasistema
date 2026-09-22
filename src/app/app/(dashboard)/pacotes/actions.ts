@@ -43,10 +43,19 @@ export async function upsertPacote(formData: FormData) {
     promotional_price: promotionalPrice,
   };
 
-  let packageId = id;
+  let packageId: string | null = null;
   if (id) {
-    await supabase.from("packages").update(payload).eq("id", id);
-    await supabase.from("package_services").delete().eq("package_id", id);
+    const { data } = await supabase
+      .from("packages")
+      .update(payload)
+      .eq("id", id)
+      .eq("business_id", business.id)
+      .select("id")
+      .single();
+    packageId = data?.id ?? null;
+    if (packageId) {
+      await supabase.from("package_services").delete().eq("package_id", packageId);
+    }
   } else {
     const { data } = await supabase.from("packages").insert(payload).select("id").single();
     packageId = data?.id ?? null;
