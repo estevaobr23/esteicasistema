@@ -3,6 +3,7 @@ import { getCurrentBusiness } from "@/lib/domain/business";
 import { limitesDoPlano } from "@/lib/domain/plans";
 import { signOut } from "@/app/(auth)/actions";
 import BottomNav from "@/components/dashboard/BottomNav";
+import { BottomNavVisibilityProvider } from "@/components/dashboard/BottomNavVisibilityProvider";
 
 const NAV_ITEMS = [
   { href: "/app/dashboard", label: "Início", navLabel: "Início", icon: "home" as const },
@@ -31,32 +32,34 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   });
 
   return (
-    <div className="flex min-h-screen bg-neutral-950 text-white">
-      <aside className="hidden w-56 flex-col border-r border-neutral-900 p-4 sm:flex">
-        <p className="mb-6 truncate px-2 text-sm font-semibold">{business.name}</p>
-        <nav className="flex-1 space-y-1">
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="block rounded-lg px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-900 hover:text-white"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <form action={signOut}>
-          <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-neutral-500 hover:bg-neutral-900">
-            Sair
-          </button>
-        </form>
-      </aside>
+    <BottomNavVisibilityProvider>
+      <div className="flex min-h-screen bg-neutral-950 text-white">
+        <aside className="hidden w-56 flex-col border-r border-neutral-900 p-4 sm:flex">
+          <p className="mb-6 truncate px-2 text-sm font-semibold">{business.name}</p>
+          <nav className="flex-1 space-y-1">
+            {items.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="block rounded-lg px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-900 hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <form action={signOut}>
+            <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-neutral-500 hover:bg-neutral-900">
+              Sair
+            </button>
+          </form>
+        </aside>
 
-      <div className="min-w-0 flex-1 overflow-x-hidden pb-[calc(4.25rem+env(safe-area-inset-bottom))] sm:pb-0">
-        {children}
+        <div className="min-w-0 flex-1 overflow-x-hidden pb-[calc(4.25rem+env(safe-area-inset-bottom))] sm:pb-0">
+          {children}
+        </div>
+
+        <BottomNav items={items} />
       </div>
-
-      <BottomNav items={items} />
-    </div>
+    </BottomNavVisibilityProvider>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useBottomNavHidden } from "./BottomNavVisibilityProvider";
 
 type IconName =
   | "home"
@@ -107,6 +108,7 @@ function NavIcon({ name, active }: { name: IconName; active: boolean }) {
 
 export default function BottomNav({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
+  const hidden = useBottomNavHidden();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [showLeftFade, setShowLeftFade] = useState(false);
   const [showRightFade, setShowRightFade] = useState(false);
@@ -135,6 +137,8 @@ export default function BottomNav({ items }: { items: NavItem[] }) {
     const active = el?.querySelector<HTMLAnchorElement>('[data-active="true"]');
     active?.scrollIntoView({ block: "nearest", inline: "center" });
   }, [pathname]);
+
+  if (hidden) return null;
 
   return (
     <nav

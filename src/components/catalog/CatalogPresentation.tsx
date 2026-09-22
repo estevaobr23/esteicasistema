@@ -12,6 +12,7 @@ import ServiceGallery from "@/components/catalog/ServiceGallery";
 import YoutubeEmbed from "@/components/catalog/YoutubeEmbed";
 import type { SectionConfig } from "@/lib/domain/catalog-sections";
 import { getCatalogTemplate } from "@/lib/domain/catalog-templates";
+import type { EditableTarget } from "@/lib/domain/editable-target";
 
 type Business = Database["public"]["Tables"]["businesses"]["Row"];
 type ServiceFeature = Database["public"]["Tables"]["service_features"]["Row"];
@@ -35,7 +36,74 @@ export type CatalogPresentationProps = {
   availabilitySlots: AvailabilitySlot[];
   reviews: Review[];
   sectionsConfig: SectionConfig[];
+  editable?: boolean;
+  onFieldTap?: (target: EditableTarget) => void;
+  onMoveSection?: (sectionId: SectionConfig["id"], direction: -1 | 1) => void;
 };
+
+function EditableText({
+  editable,
+  onTap,
+  children,
+  as: Tag = "span",
+  className,
+  style,
+}: {
+  editable?: boolean;
+  onTap?: () => void;
+  children: ReactNode;
+  as?: "h1" | "h2" | "p" | "span";
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  if (!editable) {
+    const El = Tag;
+    return <El className={className} style={style}>{children}</El>;
+  }
+  const El = Tag;
+  return (
+    <El
+      className={`${className ?? ""} cursor-pointer rounded outline-dashed outline-1 outline-offset-4 outline-white/40 transition hover:outline-white/70`}
+      style={style}
+      onClick={(e) => {
+        e.stopPropagation();
+        onTap?.();
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      {children}
+    </El>
+  );
+}
+
+function EditableMedia({
+  editable,
+  onTap,
+  children,
+}: {
+  editable?: boolean;
+  onTap?: () => void;
+  children: ReactNode;
+}) {
+  if (!editable) return <>{children}</>;
+  return (
+    <div
+      className="relative cursor-pointer rounded outline-dashed outline-1 outline-offset-2 outline-white/40 transition hover:outline-white/70"
+      onClick={(e) => {
+        e.stopPropagation();
+        onTap?.();
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      {children}
+      <span className="pointer-events-none absolute bottom-2 right-2 rounded-full bg-black/70 px-2 py-1 text-[10px] font-medium text-white">
+        Editar
+      </span>
+    </div>
+  );
+}
 
 function ServiceMedia({ service, isDark }: { service: Service; isDark: boolean }) {
   switch (service.media_mode) {
@@ -67,6 +135,9 @@ export default function CatalogPresentation({
   availabilitySlots,
   reviews,
   sectionsConfig,
+  editable,
+  onFieldTap,
+  onMoveSection,
 }: CatalogPresentationProps) {
   const template = getCatalogTemplate(business.template_id);
   const isDark = template.isDark;
@@ -110,7 +181,9 @@ export default function CatalogPresentation({
                 className="flex flex-col overflow-hidden border"
                 style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)", backgroundColor: bg, ...cardStyleProps }}
               >
-                <ServiceMedia service={s} isDark={isDark} />
+                <EditableMedia editable={editable} onTap={() => onFieldTap?.({ kind: "service_media", serviceId: s.id })}>
+                  <ServiceMedia service={s} isDark={isDark} />
+                </EditableMedia>
                 <div className="flex flex-1 flex-col gap-3 p-4">
                   <div>
                     <h3 className="text-base font-semibold">{s.name}</h3>
@@ -367,37 +440,71 @@ export default function CatalogPresentation({
         >
           {business.cover_url && <div className="absolute inset-0 bg-black/60" aria-hidden />}
           <div className="relative z-10 flex flex-col items-center gap-4">
-            {business.logo_url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={business.logo_url}
-                alt={business.name}
-                className="h-16 w-16 rounded-full object-cover ring-2 ring-white/30"
-              />
+            {(business.logo_url || editable) && (
+              <EditableMedia editable={editable} onTap={() => onFieldTap?.({ kind: "hero_media", field: "logo_url" })}>
+                {business.logo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={business.logo_url}
+                    alt={business.name}
+                    className="h-16 w-16 rounded-full object-cover ring-2 ring-white/30"
+                  />
+                ) : (
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-white/40 text-[10px] text-white/60">
+                    Logo
+                  </div>
+                )}
+              </EditableMedia>
             )}
-            <h1 className="text-3xl font-bold sm:text-4xl" style={{ color: business.cover_url ? "#fff" : textColor }}>
+            <EditableText
+              as="h1"
+              editable={editable}
+              onTap={() => onFieldTap?.({ kind: "section_text", field: "headline" })}
+              className="text-3xl font-bold sm:text-4xl"
+              style={{ color: business.cover_url ? "#fff" : textColor }}
+            >
               {business.headline || business.name}
-            </h1>
-            {business.about && (
-              <p className="max-w-md text-sm" style={{ color: business.cover_url ? "rgba(255,255,255,0.8)" : textMuted }}>
-                {business.about}
-              </p>
+            </EditableText>
+            {(business.about || editable) && (
+              <EditableText
+                as="p"
+                editable={editable}
+                onTap={() => onFieldTap?.({ kind: "section_text", field: "about" })}
+                className="max-w-md text-sm"
+                style={{ color: business.cover_url ? "rgba(255,255,255,0.8)" : textMuted }}
+              >
+                {business.about || "Toque para adicionar um texto sobre o seu negócio"}
+              </EditableText>
             )}
-            {highlights.length > 0 && (
-              <div className="mt-1 flex flex-wrap justify-center gap-2">
-                {highlights.map((h, i) => (
-                  <span
-                    key={i}
-                    className="rounded-full border px-3 py-1 text-xs font-medium"
-                    style={{
-                      borderColor: business.cover_url ? "rgba(255,255,255,0.4)" : business.primary_color,
-                      color: business.cover_url ? "#fff" : textColor,
-                    }}
-                  >
-                    {h}
-                  </span>
-                ))}
-              </div>
+            {(highlights.length > 0 || editable) && (
+              <EditableMedia
+                editable={editable}
+                onTap={() => onFieldTap?.({ kind: "section_text", field: "highlights" })}
+              >
+                <div className="mt-1 flex flex-wrap justify-center gap-2">
+                  {highlights.length > 0 ? (
+                    highlights.map((h, i) => (
+                      <span
+                        key={i}
+                        className="rounded-full border px-3 py-1 text-xs font-medium"
+                        style={{
+                          borderColor: business.cover_url ? "rgba(255,255,255,0.4)" : business.primary_color,
+                          color: business.cover_url ? "#fff" : textColor,
+                        }}
+                      >
+                        {h}
+                      </span>
+                    ))
+                  ) : (
+                    <span
+                      className="rounded-full border border-dashed px-3 py-1 text-xs font-medium"
+                      style={{ borderColor: business.cover_url ? "rgba(255,255,255,0.4)" : business.primary_color }}
+                    >
+                      + Frase de destaque
+                    </span>
+                  )}
+                </div>
+              </EditableMedia>
             )}
             <div className="mt-2 flex flex-wrap justify-center gap-3">
               <a
@@ -426,7 +533,48 @@ export default function CatalogPresentation({
           .map((s, i, visibleSections) => {
             const alternatingIndex = visibleSections.slice(0, i).filter((x) => x.id !== "branding_video").length;
             const bgColor = s.id === "branding_video" ? "" : alternatingIndex % 2 === 0 ? bg : bgDeep;
-            return sectionRenderers[s.id]?.(bgColor);
+            const rendered = sectionRenderers[s.id]?.(bgColor);
+            if (!rendered) return null;
+            if (!editable) return rendered;
+            return (
+              <div
+                key={s.id}
+                className="relative cursor-pointer outline-dashed outline-1 outline-offset-[-2px] outline-transparent transition hover:outline-white/30"
+                onClick={() => onFieldTap?.({ kind: "section_block", sectionId: s.id })}
+                role="button"
+                tabIndex={0}
+              >
+                {onMoveSection && (
+                  <div className="absolute right-2 top-2 z-10 flex flex-col gap-1">
+                    <button
+                      type="button"
+                      disabled={i === 0}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onMoveSection(s.id, -1);
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-xs text-white disabled:opacity-30"
+                      aria-label={`Mover ${s.id} para cima`}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      disabled={i === visibleSections.length - 1}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onMoveSection(s.id, 1);
+                      }}
+                      className="flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-xs text-white disabled:opacity-30"
+                      aria-label={`Mover ${s.id} para baixo`}
+                    >
+                      ↓
+                    </button>
+                  </div>
+                )}
+                {rendered}
+              </div>
+            );
           })}
 
         {/* CTA FINAL */}

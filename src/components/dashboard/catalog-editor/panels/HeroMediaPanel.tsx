@@ -4,13 +4,7 @@ import { useState } from "react";
 import { uploadBusinessMedia } from "@/lib/storage/upload";
 import { useCatalogEditorDispatch, useCatalogEditorState } from "../CatalogEditorContext";
 
-const TEMPLATES = [
-  { id: "premium_dark", nome: "Premium Dark", desc: "Preto, grafite, elegante.", swatch: "#0a0a0a" },
-  { id: "clean_detail", nome: "Clean Detail", desc: "Claro, clean, premium.", swatch: "#f5f5f4" },
-  { id: "performance", nome: "Performance", desc: "Esportivo, mais agressivo.", swatch: "#dc2626" },
-] as const;
-
-export default function TemplatePanel() {
+export default function HeroMediaPanel({ campoFoco }: { campoFoco?: "logo_url" | "cover_url" }) {
   const state = useCatalogEditorState();
   const dispatch = useCatalogEditorDispatch();
   const [uploading, setUploading] = useState<"logo" | "capa" | null>(null);
@@ -27,28 +21,22 @@ export default function TemplatePanel() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <span className="mb-2 block text-sm font-medium text-neutral-300">Template</span>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {TEMPLATES.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => dispatch({ type: "SET_THEME", theme: t.id })}
-              className={`rounded-lg border p-3 text-left transition ${
-                state.business.theme === t.id ? "border-white bg-neutral-900" : "border-neutral-800 bg-neutral-950"
-              }`}
-            >
-              <div
-                className="mb-2 h-10 w-full rounded"
-                style={{ backgroundColor: t.swatch, border: "1px solid rgba(255,255,255,0.1)" }}
-              />
-              <p className="text-xs font-semibold text-white">{t.nome}</p>
-              <p className="mt-0.5 text-[11px] text-neutral-500">{t.desc}</p>
-            </button>
-          ))}
-        </div>
+    <div className="space-y-4">
+      <div className={`grid grid-cols-2 gap-4 ${campoFoco === "logo_url" || campoFoco === "cover_url" ? "" : ""}`}>
+        <UploadField
+          label="Logo"
+          previewUrl={state.business.logo_url}
+          uploading={uploading === "logo"}
+          onFile={(f) => handleUpload("logo", f)}
+          highlighted={campoFoco === "logo_url"}
+        />
+        <UploadField
+          label="Foto principal"
+          previewUrl={state.business.cover_url}
+          uploading={uploading === "capa"}
+          onFile={(f) => handleUpload("capa", f)}
+          highlighted={campoFoco === "cover_url"}
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -77,21 +65,6 @@ export default function TemplatePanel() {
           </div>
         </div>
       </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <UploadField
-          label="Logo"
-          previewUrl={state.business.logo_url}
-          uploading={uploading === "logo"}
-          onFile={(f) => handleUpload("logo", f)}
-        />
-        <UploadField
-          label="Foto principal"
-          previewUrl={state.business.cover_url}
-          uploading={uploading === "capa"}
-          onFile={(f) => handleUpload("capa", f)}
-        />
-      </div>
     </div>
   );
 }
@@ -101,16 +74,22 @@ function UploadField({
   previewUrl,
   uploading,
   onFile,
+  highlighted,
 }: {
   label: string;
   previewUrl: string;
   uploading: boolean;
   onFile: (file: File) => void;
+  highlighted?: boolean;
 }) {
   return (
     <div>
       <label className="mb-1.5 block text-sm font-medium text-neutral-300">{label}</label>
-      <label className="flex aspect-video cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border border-dashed border-neutral-700 bg-neutral-900 text-center">
+      <label
+        className={`flex aspect-video cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border border-dashed text-center ${
+          highlighted ? "border-white bg-neutral-900" : "border-neutral-700 bg-neutral-900"
+        }`}
+      >
         {previewUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={previewUrl} alt={label} className="h-full w-full object-cover" />

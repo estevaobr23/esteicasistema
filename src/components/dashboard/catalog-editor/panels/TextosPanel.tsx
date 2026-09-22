@@ -1,10 +1,22 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useCatalogEditorDispatch, useCatalogEditorState } from "../CatalogEditorContext";
 
-export default function TextosPanel() {
+export default function TextosPanel({
+  campoFoco,
+}: {
+  campoFoco?: "headline" | "about" | "highlights";
+} = {}) {
   const state = useCatalogEditorState();
   const dispatch = useCatalogEditorDispatch();
+  const headlineRef = useRef<HTMLInputElement>(null);
+  const aboutRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (campoFoco === "headline") headlineRef.current?.focus();
+    if (campoFoco === "about") aboutRef.current?.focus();
+  }, [campoFoco]);
 
   function updateHighlight(index: number, value: string) {
     const next = [...state.business.highlights];
@@ -26,6 +38,7 @@ export default function TextosPanel() {
       <div>
         <label className="mb-1.5 block text-sm font-medium text-neutral-300">Título de destaque</label>
         <input
+          ref={headlineRef}
           value={state.business.headline}
           onChange={(e) => dispatch({ type: "SET_HEADLINE", value: e.target.value })}
           placeholder={state.business.headline || "Usa o nome do negócio se deixar em branco"}
@@ -36,6 +49,7 @@ export default function TextosPanel() {
       <div>
         <label className="mb-1.5 block text-sm font-medium text-neutral-300">Sobre</label>
         <textarea
+          ref={aboutRef}
           value={state.business.about}
           onChange={(e) => dispatch({ type: "SET_ABOUT", value: e.target.value })}
           rows={4}

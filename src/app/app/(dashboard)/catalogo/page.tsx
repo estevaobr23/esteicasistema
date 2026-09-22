@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { normalizeSectionsConfig } from "@/lib/domain/catalog-sections";
 import { buildInitialState } from "@/components/dashboard/catalog-editor/editor-state";
 import { CatalogEditorProvider } from "@/components/dashboard/catalog-editor/CatalogEditorContext";
-import CatalogEditorShell from "@/components/dashboard/catalog-editor/CatalogEditorShell";
+import CatalogEditor from "@/components/dashboard/catalog-editor/CatalogEditor";
 
 export default async function CatalogoPage() {
   const business = await getCurrentBusiness();
@@ -33,7 +33,7 @@ export default async function CatalogoPage() {
 
   return (
     <CatalogEditorProvider initialState={initialState}>
-      <CatalogEditorShell
+      <CatalogEditor
         business={business}
         services={services ?? []}
         packages={packages ?? []}
