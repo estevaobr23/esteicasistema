@@ -53,6 +53,10 @@ export default function Home() {
             { icon: "💰", title: "Preço por veículo", desc: "Hatch, sedan, SUV e picape — cada um com seu valor." },
             { icon: "📸", title: "Antes e depois", desc: "Slider interativo com os resultados do seu trabalho." },
             { icon: "💬", title: "WhatsApp com contexto", desc: "O cliente chama já dizendo o que quer e quanto viu." },
+            { icon: "🖼️", title: "Galeria por serviço", desc: "Suba várias fotos do trabalho em cada serviço." },
+            { icon: "🎬", title: "Vídeos", desc: "Mostre o processo ou o resultado em vídeo, direto no catálogo." },
+            { icon: "🎨", title: "Paleta da sua marca", desc: "Cor principal e de destaque do jeito que você atende." },
+            { icon: "👁️", title: "Seções sob controle", desc: "Mostre ou esconda cada bloco do catálogo quando quiser." },
           ].map((r) => (
             <div key={r.title} className="rounded-xl border border-white/10 bg-[#0a0a0a] p-4 text-center">
               <div className="mb-2 text-2xl">{r.icon}</div>
@@ -95,6 +99,30 @@ export default function Home() {
           <h2 className="text-2xl font-bold">Mostre os horários que você tem livre — sem agenda complicada.</h2>
           <p className="mt-3 text-sm text-white/60">
             Você configura uma vez por semana. O cliente vê e já chama no WhatsApp com o horário de interesse.
+          </p>
+        </div>
+      </section>
+
+      {/* BLOCO TEMÁTICO 4 — fundo escuro (primária) */}
+      <section className="px-4 py-16" style={{ backgroundColor: PRIMARY_DEEP }}>
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">Toda a prova, num lugar só</p>
+          <h2 className="text-2xl font-bold">Galeria de fotos por serviço e vídeo do processo, sem sair do link.</h2>
+          <p className="mt-3 text-sm text-white/80">
+            Além do antes/depois, suba quantas fotos quiser em cada serviço e mostre um vídeo do processo ou do
+            resultado. O cliente vê o trabalho de verdade antes de chamar.
+          </p>
+        </div>
+      </section>
+
+      {/* BLOCO TEMÁTICO 5 */}
+      <section className="px-4 py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/40">Sua cara, seu controle</p>
+          <h2 className="text-2xl font-bold">Cores da sua marca e as seções que fazem sentido pro seu negócio.</h2>
+          <p className="mt-3 text-sm text-white/60">
+            Defina a cor principal e a de destaque, e escolha quais blocos aparecem no seu catálogo — sem risco de
+            bagunçar o layout, porque a estrutura já vem pronta e bonita.
           </p>
         </div>
       </section>
@@ -142,13 +170,20 @@ export default function Home() {
               <li className="flex items-center gap-2">
                 <span className="text-emerald-500">✓</span> WhatsApp com contexto
               </li>
+              <li className="flex items-center gap-2">
+                <span className="text-emerald-500">✓</span> Horários e paleta da marca
+              </li>
               <li className="flex items-center gap-2 text-white/40">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
                 Antes e depois
               </li>
               <li className="flex items-center gap-2 text-white/40">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
-                Pacotes
+                Galeria de fotos e vídeos
+              </li>
+              <li className="flex items-center gap-2 text-white/40">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
+                Pacotes e avaliações
               </li>
               <li className="flex items-center gap-2 text-white/40">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">✕</span>
@@ -187,13 +222,22 @@ export default function Home() {
                 <span className="text-emerald-500">✓</span> WhatsApp com contexto
               </li>
               <li className="flex items-center gap-2">
+                <span className="text-emerald-500">✓</span> Horários e paleta da marca
+              </li>
+              <li className="flex items-center gap-2">
                 <span className="text-emerald-500">✓</span> Antes e depois
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-emerald-500">✓</span> Pacotes de serviços
+                <span className="text-emerald-500">✓</span> Galeria de fotos e vídeos por serviço
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-emerald-500">✓</span> Pacotes e avaliações de clientes
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-emerald-500">✓</span> Analytics de visitantes
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-emerald-500">✓</span> Sem marca d&apos;água
               </li>
             </ul>
 

@@ -1,9 +1,23 @@
 import { getCurrentBusiness } from "@/lib/domain/business";
 import { createClient } from "@/lib/supabase/server";
+import { limitesDoPlano } from "@/lib/domain/plans";
 import { adicionarAvaliacao, removerAvaliacao, toggleAvaliacaoAtiva } from "./actions";
 
 export default async function AvaliacoesPage() {
   const business = await getCurrentBusiness();
+  const limites = limitesDoPlano(business.plano as "essencial" | "profissional");
+
+  if (!limites.permiteAvaliacoes) {
+    return (
+      <main className="mx-auto max-w-2xl px-4 py-10 text-center">
+        <h1 className="mb-2 text-xl font-semibold text-white">Avaliações</h1>
+        <p className="text-sm text-neutral-400">
+          Avaliações estão disponíveis no plano Profissional. Faça upgrade para mostrar o que seus clientes dizem.
+        </p>
+      </main>
+    );
+  }
+
   const supabase = await createClient();
 
   const { data: reviews } = await supabase

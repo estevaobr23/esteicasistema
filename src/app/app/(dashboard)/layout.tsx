@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { href: "/app/pacotes", label: "Pacotes", plano: "profissional" as const },
   { href: "/app/portfolio", label: "Portfólio", plano: "profissional" as const },
   { href: "/app/horarios", label: "Horários" },
-  { href: "/app/avaliacoes", label: "Avaliações" },
+  { href: "/app/avaliacoes", label: "Avaliações", plano: "profissional" as const },
   { href: "/app/analytics", label: "Analytics", plano: "profissional" as const },
   { href: "/app/personalizar", label: "Personalizar" },
   { href: "/app/configuracoes", label: "Configurações" },
@@ -23,6 +23,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     if (item.plano === "profissional") {
       if (item.href === "/app/pacotes") return limites.permitePacotes;
       if (item.href === "/app/portfolio") return limites.permitePortfolio;
+      if (item.href === "/app/avaliacoes") return limites.permiteAvaliacoes;
       if (item.href === "/app/analytics") return limites.permiteAnalytics;
     }
     return true;
