@@ -16,6 +16,7 @@ export default function SaveBar() {
         business: state.business,
         services: state.services,
         sectionsConfig: state.sectionsConfig,
+        layout: state.layout,
       });
       if (result.ok) {
         dispatch({ type: "SAVE_SUCCESS", savedAt: result.savedAt });

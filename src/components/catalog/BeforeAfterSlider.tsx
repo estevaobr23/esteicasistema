@@ -6,10 +6,12 @@ export default function BeforeAfterSlider({
   beforeImage,
   afterImage,
   alt,
+  aspect = "landscape",
 }: {
   beforeImage: string;
   afterImage: string;
   alt: string;
+  aspect?: "landscape" | "square";
 }) {
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,12 +27,12 @@ export default function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-[4/3] w-full touch-none select-none overflow-hidden rounded-xl"
+      className={`relative w-full touch-none select-none overflow-hidden rounded-xl bg-neutral-950 ${aspect === "square" ? "aspect-square" : "aspect-[4/3]"}`}
       onMouseMove={(e) => e.buttons === 1 && updateFromClientX(e.clientX)}
       onTouchMove={(e) => updateFromClientX(e.touches[0].clientX)}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={afterImage} alt={`${alt} — depois`} className="absolute inset-0 h-full w-full object-cover" />
+      <img src={afterImage} alt={`${alt} — depois`} className={`absolute inset-0 h-full w-full ${aspect === "square" ? "object-contain" : "object-cover"}`} />
       <div
         className="absolute inset-0 h-full w-full overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
@@ -39,7 +41,7 @@ export default function BeforeAfterSlider({
         <img
           src={beforeImage}
           alt={`${alt} — antes`}
-          className="absolute inset-0 h-full w-full object-cover"
+          className={`absolute inset-0 h-full w-full ${aspect === "square" ? "object-contain" : "object-cover"}`}
         />
       </div>
 

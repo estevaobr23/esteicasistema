@@ -28,7 +28,7 @@ export async function getPublishedBusinessBySlug(slug: string) {
       .order("sort_order"),
     supabase
       .from("packages")
-      .select("*, package_services(service_id)")
+      .select("*, package_services(service_id), package_benefits(*)")
       .eq("business_id", business.id)
       .eq("active", true)
       .order("sort_order"),

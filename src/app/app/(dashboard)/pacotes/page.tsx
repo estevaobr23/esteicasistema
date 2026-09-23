@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getCurrentBusiness } from "@/lib/domain/business";
 import { createClient } from "@/lib/supabase/server";
-import { togglePacoteAtivo, excluirPacote } from "./actions";
+import { togglePacoteAtivo, excluirPacote, duplicarPacote } from "./actions";
 import { formatBRL } from "@/lib/format";
 import {
   DashboardPageHeader,
@@ -10,6 +10,7 @@ import {
   StatusBadge,
   primaryButtonClass,
 } from "@/components/dashboard/DashboardUI";
+import AdaptiveSquareImage from "@/components/AdaptiveSquareImage";
 
 export default async function PacotesPage({
   searchParams,
@@ -21,7 +22,7 @@ export default async function PacotesPage({
   const supabase = await createClient();
   const { data: packages } = await supabase
     .from("packages")
-    .select("*, package_services(service_id)")
+    .select("*, package_services(service_id), package_benefits(*)")
     .eq("business_id", business.id)
     .order("sort_order");
 
@@ -82,10 +83,9 @@ export default async function PacotesPage({
           return (
             <article key={item.id} className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900">
               {item.image_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={item.image_url} alt="" className="h-36 w-full object-cover" />
+                <AdaptiveSquareImage src={item.image_url} alt={item.name} className="w-full rounded-none" />
               ) : (
-                <div className="flex h-28 items-center justify-center bg-neutral-950 text-xs text-neutral-600">Sem imagem</div>
+                <div className="flex aspect-square items-center justify-center bg-neutral-950 text-xs text-neutral-600">Sem imagem</div>
               )}
               <div className="p-5">
                 <div className="flex flex-wrap items-center gap-2">
@@ -94,6 +94,7 @@ export default async function PacotesPage({
                   {promotional && <StatusBadge tone="brand">Economize {saving}%</StatusBadge>}
                 </div>
                 <p className="mt-2 line-clamp-2 text-sm leading-5 text-neutral-500">{item.description || "Adicione uma descrição para valorizar esta oferta."}</p>
+                <div className="mt-3 flex flex-wrap gap-1 text-[10px] text-neutral-500">{item.image_url && <span className="rounded bg-neutral-950 px-2 py-1">Foto</span>}{Array.isArray(item.gallery) && item.gallery.length > 0 && <span className="rounded bg-neutral-950 px-2 py-1">{item.gallery.length} fotos</span>}{item.video_url && <span className="rounded bg-neutral-950 px-2 py-1">Vídeo</span>}{item.package_benefits?.length ? <span className="rounded bg-neutral-950 px-2 py-1">{item.package_benefits.length} benefícios</span> : null}</div>
                 <div className="mt-4 flex items-end justify-between gap-3">
                   <div>
                     {promotional && <p className="text-xs text-neutral-600 line-through">{formatBRL(item.price)}</p>}
@@ -103,6 +104,7 @@ export default async function PacotesPage({
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2 text-xs">
                   <Link href={`/app/pacotes/${item.id}`} className="rounded-md bg-white px-3 py-1.5 font-semibold text-neutral-950">Editar</Link>
+                  <form action={duplicarPacote}><input type="hidden" name="id" value={item.id} /><button className="rounded-md border border-neutral-700 px-3 py-1.5 font-medium text-white">Duplicar</button></form>
                   <form action={togglePacoteAtivo}>
                     <input type="hidden" name="id" value={item.id} />
                     <input type="hidden" name="active" value={(!item.active).toString()} />

@@ -60,7 +60,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <BottomNavVisibilityProvider>
       <div className="flex min-h-screen bg-neutral-950 text-white">
-      <aside className="hidden w-64 flex-col border-r border-neutral-900 bg-[#090909] p-4 sm:flex">
+      <aside className="hidden w-64 flex-col border-r border-neutral-800 bg-neutral-900 p-4 sm:flex">
         <div className="mb-6 rounded-xl border border-neutral-800 bg-neutral-900 p-3">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-red-500">Vitrine Detail</p>
           <p className="mt-1 truncate text-sm font-semibold text-white">{business.name}</p>
@@ -106,7 +106,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </form>
         </aside>
 
-        <div className="min-w-0 flex-1 overflow-x-hidden pb-[calc(4.25rem+env(safe-area-inset-bottom))] sm:pb-0">
+        <div className="min-w-0 flex-1 overflow-x-clip pb-[calc(4.25rem+env(safe-area-inset-bottom))] sm:pb-0">
           {children}
         </div>
 

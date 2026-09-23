@@ -89,13 +89,23 @@ export type Database = {
         Row: {
           about: string | null
           address: string | null
+          animation_preset: string
+          bg_color_override: string | null
           branding_video_url: string | null
           business_hours: Json | null
+          button_radius: number
+          catalog_layout: Json
+          catalog_layout_version: number
+          catalog_updated_at: string | null
           city: string | null
           cover_url: string | null
           created_at: string
           email: string | null
+          font_pair_id: string
           headline: string | null
+          hero_show_city_badge: boolean
+          hero_show_price_badge: boolean
+          hero_show_whatsapp_badge: boolean
           highlights: Json
           id: string
           instagram: string | null
@@ -119,13 +129,23 @@ export type Database = {
         Insert: {
           about?: string | null
           address?: string | null
+          animation_preset?: string
+          bg_color_override?: string | null
           branding_video_url?: string | null
           business_hours?: Json | null
+          button_radius?: number
+          catalog_layout?: Json
+          catalog_layout_version?: number
+          catalog_updated_at?: string | null
           city?: string | null
           cover_url?: string | null
           created_at?: string
           email?: string | null
+          font_pair_id?: string
           headline?: string | null
+          hero_show_city_badge?: boolean
+          hero_show_price_badge?: boolean
+          hero_show_whatsapp_badge?: boolean
           highlights?: Json
           id?: string
           instagram?: string | null
@@ -149,13 +169,23 @@ export type Database = {
         Update: {
           about?: string | null
           address?: string | null
+          animation_preset?: string
+          bg_color_override?: string | null
           branding_video_url?: string | null
           business_hours?: Json | null
+          button_radius?: number
+          catalog_layout?: Json
+          catalog_layout_version?: number
+          catalog_updated_at?: string | null
           city?: string | null
           cover_url?: string | null
           created_at?: string
           email?: string | null
+          font_pair_id?: string
           headline?: string | null
+          hero_show_city_badge?: boolean
+          hero_show_price_badge?: boolean
+          hero_show_whatsapp_badge?: boolean
           highlights?: Json
           id?: string
           instagram?: string | null
@@ -177,6 +207,41 @@ export type Database = {
           whatsapp?: string | null
         }
         Relationships: []
+      }
+      package_benefits: {
+        Row: {
+          color_key: string
+          icon_key: string
+          id: string
+          label: string
+          package_id: string
+          sort_order: number
+        }
+        Insert: {
+          color_key?: string
+          icon_key?: string
+          id?: string
+          label: string
+          package_id: string
+          sort_order?: number
+        }
+        Update: {
+          color_key?: string
+          icon_key?: string
+          id?: string
+          label?: string
+          package_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_benefits_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       package_services: {
         Row: {
@@ -214,39 +279,54 @@ export type Database = {
           business_id: string
           cta_label: string | null
           description: string | null
+          duration_minutes: number | null
           featured: boolean
+          gallery: Json
           id: string
           image_url: string | null
+          media_mode: string
           name: string
           price: number
           promotional_price: number | null
           sort_order: number
+          video_poster_url: string | null
+          video_url: string | null
         }
         Insert: {
           active?: boolean
           business_id: string
           cta_label?: string | null
           description?: string | null
+          duration_minutes?: number | null
           featured?: boolean
+          gallery?: Json
           id?: string
           image_url?: string | null
+          media_mode?: string
           name: string
           price: number
           promotional_price?: number | null
           sort_order?: number
+          video_poster_url?: string | null
+          video_url?: string | null
         }
         Update: {
           active?: boolean
           business_id?: string
           cta_label?: string | null
           description?: string | null
+          duration_minutes?: number | null
           featured?: boolean
+          gallery?: Json
           id?: string
           image_url?: string | null
+          media_mode?: string
           name?: string
           price?: number
           promotional_price?: number | null
           sort_order?: number
+          video_poster_url?: string | null
+          video_url?: string | null
         }
         Relationships: [
           {
@@ -261,42 +341,69 @@ export type Database = {
       portfolio_items: {
         Row: {
           active: boolean
-          after_image: string
-          before_image: string
+          after_image: string | null
+          before_image: string | null
           business_id: string
           category: string | null
           description: string | null
+          featured: boolean
+          gallery: Json
           id: string
+          image_url: string | null
+          instagram_url: string | null
+          media_type: string
           service_id: string | null
           sort_order: number
           title: string | null
           vehicle: string | null
+          vehicle_make: string | null
+          vehicle_model: string | null
+          vehicle_year: number | null
+          video_url: string | null
         }
         Insert: {
           active?: boolean
-          after_image: string
-          before_image: string
+          after_image?: string | null
+          before_image?: string | null
           business_id: string
           category?: string | null
           description?: string | null
+          featured?: boolean
+          gallery?: Json
           id?: string
+          image_url?: string | null
+          instagram_url?: string | null
+          media_type?: string
           service_id?: string | null
           sort_order?: number
           title?: string | null
           vehicle?: string | null
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_year?: number | null
+          video_url?: string | null
         }
         Update: {
           active?: boolean
-          after_image?: string
-          before_image?: string
+          after_image?: string | null
+          before_image?: string | null
           business_id?: string
           category?: string | null
           description?: string | null
+          featured?: boolean
+          gallery?: Json
           id?: string
+          image_url?: string | null
+          instagram_url?: string | null
+          media_type?: string
           service_id?: string | null
           sort_order?: number
           title?: string | null
           vehicle?: string | null
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_year?: number | null
+          video_url?: string | null
         }
         Relationships: [
           {
@@ -372,8 +479,14 @@ export type Database = {
           business_id: string
           created_at: string
           customer_name: string
+          customer_photo_url: string | null
           id: string
+          package_id: string | null
+          portfolio_item_id: string | null
           rating: number
+          review_date: string | null
+          service_id: string | null
+          source: string
           text: string | null
         }
         Insert: {
@@ -381,8 +494,14 @@ export type Database = {
           business_id: string
           created_at?: string
           customer_name: string
+          customer_photo_url?: string | null
           id?: string
+          package_id?: string | null
+          portfolio_item_id?: string | null
           rating: number
+          review_date?: string | null
+          service_id?: string | null
+          source?: string
           text?: string | null
         }
         Update: {
@@ -390,8 +509,14 @@ export type Database = {
           business_id?: string
           created_at?: string
           customer_name?: string
+          customer_photo_url?: string | null
           id?: string
+          package_id?: string | null
+          portfolio_item_id?: string | null
           rating?: number
+          review_date?: string | null
+          service_id?: string | null
+          source?: string
           text?: string | null
         }
         Relationships: [
@@ -400,6 +525,27 @@ export type Database = {
             columns: ["business_id"]
             isOneToOne: false
             referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_portfolio_item_id_fkey"
+            columns: ["portfolio_item_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
             referencedColumns: ["id"]
           },
         ]
@@ -517,6 +663,16 @@ export type Database = {
           media_mode: string
           name: string
           price_type: string
+          sales_bonuses: Json
+          sales_cta_message: string | null
+          sales_faq: Json
+          sales_gallery: Json
+          sales_guarantee_text: string | null
+          sales_headline: string | null
+          sales_page_enabled: boolean
+          sales_subheadline: string | null
+          sales_urgency_text: string | null
+          sales_video_url: string | null
           short_description: string | null
           slug: string | null
           sort_order: number
@@ -540,6 +696,16 @@ export type Database = {
           media_mode?: string
           name: string
           price_type?: string
+          sales_bonuses?: Json
+          sales_cta_message?: string | null
+          sales_faq?: Json
+          sales_gallery?: Json
+          sales_guarantee_text?: string | null
+          sales_headline?: string | null
+          sales_page_enabled?: boolean
+          sales_subheadline?: string | null
+          sales_urgency_text?: string | null
+          sales_video_url?: string | null
           short_description?: string | null
           slug?: string | null
           sort_order?: number
@@ -563,6 +729,16 @@ export type Database = {
           media_mode?: string
           name?: string
           price_type?: string
+          sales_bonuses?: Json
+          sales_cta_message?: string | null
+          sales_faq?: Json
+          sales_gallery?: Json
+          sales_guarantee_text?: string | null
+          sales_headline?: string | null
+          sales_page_enabled?: boolean
+          sales_subheadline?: string | null
+          sales_urgency_text?: string | null
+          sales_video_url?: string | null
           short_description?: string | null
           slug?: string | null
           sort_order?: number

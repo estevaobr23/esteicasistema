@@ -15,7 +15,7 @@ export default async function EditarPacotePage({
   const [{ data: pacote }, { data: servicos }] = await Promise.all([
     supabase
       .from("packages")
-      .select("*, package_services(service_id)")
+      .select("*, package_services(service_id), package_benefits(*)")
       .eq("id", id)
       .eq("business_id", business.id)
       .maybeSingle(),

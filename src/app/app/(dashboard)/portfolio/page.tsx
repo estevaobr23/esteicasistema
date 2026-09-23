@@ -4,6 +4,7 @@ import { limitesDoPlano } from "@/lib/domain/plans";
 import { excluirItemPortfolio, toggleItemPortfolioAtivo } from "./actions";
 import PortfolioForm from "@/components/dashboard/PortfolioForm";
 import { DashboardPageHeader, EmptyState, MetricCard, SectionCard, StatusBadge } from "@/components/dashboard/DashboardUI";
+import PortfolioMedia from "@/components/catalog/PortfolioMedia";
 
 export default async function PortfolioPage({
   searchParams,
@@ -26,7 +27,7 @@ export default async function PortfolioPage({
   const supabase = await createClient();
   const since = new Date();
   since.setDate(since.getDate() - 30);
-  const [{ data: items }, { count: portfolioViews }] = await Promise.all([
+  const [{ data: items }, { count: portfolioViews }, { data: services }] = await Promise.all([
     supabase.from("portfolio_items").select("*").eq("business_id", business.id).order("sort_order"),
     supabase
       .from("analytics_events")
@@ -34,6 +35,7 @@ export default async function PortfolioPage({
       .eq("business_id", business.id)
       .eq("event_type", "portfolio_view")
       .gte("created_at", since.toISOString()),
+    supabase.from("services").select("id, name").eq("business_id", business.id).eq("active", true).order("sort_order"),
   ]);
 
   const allItems = items ?? [];
@@ -58,7 +60,7 @@ export default async function PortfolioPage({
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
         <SectionCard title="Adicionar resultado" description="Use duas fotos com enquadramento parecido para valorizar a comparação.">
-          <PortfolioForm businessId={business.id} />
+          <PortfolioForm businessId={business.id} services={services ?? []} />
         </SectionCard>
 
         <div>
@@ -72,18 +74,14 @@ export default async function PortfolioPage({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {filtered.map((item) => (
               <article key={item.id} className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900">
-                <div className="grid grid-cols-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.before_image} alt="Antes" className="aspect-square object-cover" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.after_image} alt="Depois" className="aspect-square object-cover" />
-                </div>
+                <PortfolioMedia item={item} />
                 <div className="p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="truncate text-sm font-semibold text-white">{item.title || "Resultado sem título"}</h2>
                     {!item.active && <StatusBadge>Oculto</StatusBadge>}
                   </div>
-                  <p className="mt-1 text-xs text-neutral-500">{item.vehicle || "Veículo não informado"}{item.category ? ` · ${item.category}` : ""}</p>
+                  <p className="mt-1 text-xs text-neutral-500">{[item.vehicle_make, item.vehicle_model, item.vehicle_year].filter(Boolean).join(" ") || item.vehicle || "Veículo não informado"}{item.category ? ` · ${item.category}` : ""}</p>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-800"><div className="h-full bg-emerald-500" style={{ width: `${Math.min(100, [item.title, item.service_id, item.description, item.category, item.vehicle_make || item.vehicle, item.media_type].filter(Boolean).length * 17)}%` }} /></div>
                   <div className="mt-3 flex gap-2 text-[11px]">
                     <form action={toggleItemPortfolioAtivo}>
                       <input type="hidden" name="id" value={item.id} />

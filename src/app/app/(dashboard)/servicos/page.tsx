@@ -11,6 +11,7 @@ import {
   StatusBadge,
   primaryButtonClass,
 } from "@/components/dashboard/DashboardUI";
+import AdaptiveSquareImage from "@/components/AdaptiveSquareImage";
 
 export default async function ServicosPage({
   searchParams,
@@ -39,7 +40,7 @@ export default async function ServicosPage({
   const ocultos = allServices.length - ativos;
   const destaques = allServices.filter((service) => service.featured).length;
   const incompletos = allServices.filter(
-    (service) => !service.image_url || (service.price_type !== "quote" && service.price_type !== "vehicle" && !service.base_price)
+    (service) => !hasMedia(service) || (service.price_type !== "quote" && service.price_type !== "vehicle" && !service.base_price)
   ).length;
   const viewsByService = (events ?? []).reduce<Record<string, number>>((totals, event) => {
     if (event.service_id) totals[event.service_id] = (totals[event.service_id] ?? 0) + 1;
@@ -54,7 +55,7 @@ export default async function ServicosPage({
       (status === "ocultos" && !service.active) ||
       (status === "destaques" && service.featured) ||
       (status === "incompletos" &&
-        (!service.image_url ||
+        (!hasMedia(service) ||
           (service.price_type !== "quote" && service.price_type !== "vehicle" && !service.base_price)));
     return matchesQuery && matchesStatus;
   });
@@ -101,17 +102,16 @@ export default async function ServicosPage({
       <div className="mt-4 space-y-3">
         {filtered.map((service) => {
           const incomplete =
-            !service.image_url ||
+            !hasMedia(service) ||
             (service.price_type !== "quote" && service.price_type !== "vehicle" && !service.base_price);
           return (
             <article key={service.id} className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
               <div className="flex gap-4">
-                <div className="h-20 w-24 shrink-0 overflow-hidden rounded-xl bg-neutral-950">
+                <div className="w-24 shrink-0 sm:w-28">
                   {service.image_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={service.image_url} alt="" className="h-full w-full object-cover" />
+                    <AdaptiveSquareImage src={service.image_url} alt={service.name} className="rounded-xl" />
                   ) : (
-                    <div className="flex h-full items-center justify-center text-[10px] text-neutral-600">Sem imagem</div>
+                    <div className="flex aspect-square items-center justify-center rounded-xl bg-neutral-950 text-[10px] text-neutral-600">Sem imagem</div>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -129,6 +129,7 @@ export default async function ServicosPage({
                         : "Sob consulta"}
                   </p>
                   <p className="mt-2 text-xs text-neutral-600">{viewsByService[service.id] ?? 0} visualização(ões) nos últimos 30 dias</p>
+                  <div className="mt-2 flex flex-wrap gap-1 text-[10px] text-neutral-500">{service.image_url && <span className="rounded bg-neutral-950 px-2 py-1">Foto</span>}{service.before_image && service.after_image && <span className="rounded bg-neutral-950 px-2 py-1">Antes/depois</span>}{Array.isArray(service.gallery) && service.gallery.length > 0 && <span className="rounded bg-neutral-950 px-2 py-1">{service.gallery.length} fotos</span>}{service.video_url && <span className="rounded bg-neutral-950 px-2 py-1">Vídeo</span>}</div>
                 </div>
               </div>
 
@@ -162,4 +163,8 @@ export default async function ServicosPage({
       </div>
     </main>
   );
+}
+
+function hasMedia(service: { image_url: string | null; before_image: string | null; after_image: string | null; gallery: unknown; video_url: string | null }) {
+  return !!service.image_url || (!!service.before_image && !!service.after_image) || (Array.isArray(service.gallery) && service.gallery.length > 0) || !!service.video_url;
 }

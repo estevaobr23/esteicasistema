@@ -31,6 +31,43 @@ export async function saveVisual(formData: FormData) {
     .eq("id", business.id);
 
   revalidatePath("/app/onboarding");
+  redirect("/app/onboarding?etapa=contato");
+}
+
+export async function saveContato(formData: FormData) {
+  const business = await getCurrentBusinessRaw();
+  const supabase = await createClient();
+
+  const whatsapp = String(formData.get("whatsapp") ?? "").replace(/\D/g, "");
+
+  if (!whatsapp) {
+    redirect(`/app/onboarding?etapa=contato&erro=${encodeURIComponent("Informe o WhatsApp para continuar.")}`);
+  }
+
+  const city = String(formData.get("city") ?? "").trim() || null;
+  const email = String(formData.get("email") ?? "").trim() || null;
+  const address = String(formData.get("address") ?? "").trim() || null;
+  const instagram = String(formData.get("instagram") ?? "").trim() || null;
+
+  const dias = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"];
+  const business_hours = Object.fromEntries(
+    dias.map((dia) => [dia, String(formData.get(`horario__${dia}`) ?? "").trim() || "fechado"])
+  );
+
+  await supabase
+    .from("businesses")
+    .update({
+      whatsapp,
+      phone: whatsapp,
+      city,
+      email,
+      address,
+      instagram,
+      business_hours,
+    })
+    .eq("id", business.id);
+
+  revalidatePath("/app/onboarding");
   redirect("/app/onboarding?etapa=servicos");
 }
 

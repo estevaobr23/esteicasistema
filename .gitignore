@@ -48,3 +48,8 @@ next-env.d.ts
 
 # supabase CLI local cache
 /supabase/.temp/
+
+# codex working files/logs
+/.codex-artifacts/
+.codex-dev-server.log
+.codex-dev-server-error.log

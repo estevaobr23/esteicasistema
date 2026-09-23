@@ -14,7 +14,7 @@ export default async function EditarServicoPage({
 
   const { data: service } = await supabase
     .from("services")
-    .select("*, service_prices(*)")
+    .select("*, service_prices(*), service_features(*)")
     .eq("id", id)
     .eq("business_id", business.id)
     .maybeSingle();

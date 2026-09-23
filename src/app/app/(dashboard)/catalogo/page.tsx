@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getCurrentBusiness } from "@/lib/domain/business";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeSectionsConfig } from "@/lib/domain/catalog-sections";
@@ -19,7 +20,7 @@ export default async function CatalogoPage() {
         .order("sort_order"),
       supabase
         .from("packages")
-        .select("*, package_services(service_id)")
+        .select("*, package_services(service_id), package_benefits(*)")
         .eq("business_id", business.id)
         .eq("active", true)
         .order("sort_order"),
@@ -33,14 +34,16 @@ export default async function CatalogoPage() {
 
   return (
     <CatalogEditorProvider initialState={initialState}>
-      <CatalogEditor
-        business={business}
-        services={services ?? []}
-        packages={packages ?? []}
-        portfolioItems={portfolioItems ?? []}
-        availabilitySlots={availabilitySlots ?? []}
-        reviews={reviews ?? []}
-      />
+      <Suspense fallback={null}>
+        <CatalogEditor
+          business={business}
+          services={services ?? []}
+          packages={packages ?? []}
+          portfolioItems={portfolioItems ?? []}
+          availabilitySlots={availabilitySlots ?? []}
+          reviews={reviews ?? []}
+        />
+      </Suspense>
     </CatalogEditorProvider>
   );
 }

@@ -8,6 +8,8 @@ export type {
   EditorAction,
   EditorState,
   MediaMode,
+  SalesBonus,
+  SalesFaq,
   ServiceDraft,
 } from "./editor-state";
 export { buildInitialState } from "./editor-state";

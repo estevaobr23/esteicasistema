@@ -3,11 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 import { createBusiness } from "./actions";
 import StepNegocio from "@/components/onboarding/StepNegocio";
 import StepVisual from "@/components/onboarding/StepVisual";
+import StepContato from "@/components/onboarding/StepContato";
 import StepServicos from "@/components/onboarding/StepServicos";
 import StepPrecos from "@/components/onboarding/StepPrecos";
 import StepPublicar from "@/components/onboarding/StepPublicar";
 
-const ETAPAS = ["negocio", "visual", "servicos", "precos", "publicar"] as const;
+const ETAPAS = ["negocio", "visual", "contato", "servicos", "precos", "publicar"] as const;
 type Etapa = (typeof ETAPAS)[number];
 
 export default async function OnboardingPage({
@@ -48,6 +49,7 @@ export default async function OnboardingPage({
   return (
     <OnboardingShell etapaAtual={etapa} erro={erro}>
       {etapa === "visual" && <StepVisual business={business} />}
+      {etapa === "contato" && <StepContato business={business} />}
       {etapa === "servicos" && <StepServicos business={business} />}
       {etapa === "precos" && <StepPrecos business={business} />}
       {etapa === "publicar" && <StepPublicar business={business} />}

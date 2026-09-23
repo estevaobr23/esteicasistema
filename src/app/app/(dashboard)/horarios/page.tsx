@@ -1,6 +1,6 @@
 import { getCurrentBusiness } from "@/lib/domain/business";
 import { createClient } from "@/lib/supabase/server";
-import { adicionarHorario, removerHorario } from "./actions";
+import { adicionarHorario, configurarSemanaRapida, removerHorario } from "./actions";
 import { DashboardPageHeader, MetricCard, SectionCard } from "@/components/dashboard/DashboardUI";
 
 const DIAS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
@@ -26,7 +26,7 @@ export default async function HorariosPage() {
   const porDia = DIAS.map((_, weekday) => ({ weekday, slots: allSlots.filter((slot) => slot.weekday === weekday) }));
   const daysWithAvailability = porDia.filter((day) => day.slots.some((slot) => slot.active)).length;
   const nextSlot = [...activeSlots].sort((a, b) => a.weekday - b.weekday || a.time.localeCompare(b.time))[0];
-  const mostAvailableDay = porDia.sort((a, b) => b.slots.length - a.slots.length)[0];
+  const mostAvailableDay = [...porDia].sort((a, b) => b.slots.length - a.slots.length)[0];
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
@@ -48,7 +48,21 @@ export default async function HorariosPage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[0.7fr_1.3fr]">
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <SectionCard title="Configuração rápida" description="Monte a semana inteira de uma vez e depois ajuste dias específicos.">
+          <form action={configurarSemanaRapida} className="space-y-4">
+            <label className="flex items-center gap-2 text-sm text-neutral-300"><input type="checkbox" name="weekdays" defaultChecked className="accent-white" />Segunda a sexta</label>
+            <div className="grid grid-cols-2 gap-2"><input type="time" name="weekday_start" defaultValue="08:00" className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-white" /><input type="time" name="weekday_end" defaultValue="18:00" className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-white" /></div>
+            <label className="flex items-center gap-2 text-sm text-neutral-300"><input type="checkbox" name="saturday" defaultChecked className="accent-white" />Sábado</label>
+            <div className="grid grid-cols-2 gap-2"><input type="time" name="saturday_start" defaultValue="08:00" className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-white" /><input type="time" name="saturday_end" defaultValue="13:00" className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-white" /></div>
+            <label className="flex items-center gap-2 text-sm text-neutral-300"><input type="checkbox" name="sunday" className="accent-white" />Domingo</label>
+            <div className="grid grid-cols-2 gap-2"><input type="time" name="sunday_start" defaultValue="08:00" className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-white" /><input type="time" name="sunday_end" defaultValue="12:00" className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-white" /></div>
+            <label className="block text-xs text-neutral-500">Intervalo<select name="interval" defaultValue="60" className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2.5 text-sm text-white"><option value="30">30 minutos</option><option value="60">1 hora</option><option value="90">1h30</option><option value="120">2 horas</option></select></label>
+            <button className="w-full rounded-lg bg-white px-4 py-3 text-sm font-semibold text-neutral-950">Aplicar à semana</button>
+            <p className="text-[11px] leading-5 text-amber-300/70">Ao aplicar, a configuração semanal substitui os horários atuais. Depois você pode personalizar individualmente abaixo.</p>
+          </form>
+        </SectionCard>
+
         <SectionCard title="Adicionar disponibilidade" description="Você pode cadastrar mais de um horário no mesmo dia.">
           <form action={adicionarHorario} className="space-y-4">
             <div>
@@ -68,7 +82,7 @@ export default async function HorariosPage() {
           </p>
         </SectionCard>
 
-        <SectionCard title="Sua semana" description="Confira rapidamente os dias cobertos e remova horários que não deseja mais mostrar.">
+        <div className="lg:col-span-2"><SectionCard title="Sua semana" description="Confira rapidamente os dias cobertos e remova horários que não deseja mais mostrar.">
           <div className="grid gap-3 sm:grid-cols-2">
             {porDia.map(({ weekday, slots: daySlots }) => (
               <div key={weekday} className="rounded-xl border border-neutral-800 bg-neutral-950 p-4">
@@ -92,7 +106,7 @@ export default async function HorariosPage() {
               </div>
             ))}
           </div>
-        </SectionCard>
+        </SectionCard></div>
       </div>
     </main>
   );

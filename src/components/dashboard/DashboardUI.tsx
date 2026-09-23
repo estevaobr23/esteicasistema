@@ -103,7 +103,7 @@ export function QuickAction({ href, title, description, icon }: { href: string; 
   return (
     <Link
       href={href}
-      className="group flex items-start gap-3 rounded-xl border border-neutral-800 bg-neutral-950 p-4 transition hover:border-neutral-700 hover:bg-neutral-900"
+      className="group flex items-start gap-3 rounded-xl border border-neutral-800 bg-neutral-950 p-4 transition hover:border-neutral-700 hover:bg-neutral-800"
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-sm font-bold text-neutral-950">
         {icon}

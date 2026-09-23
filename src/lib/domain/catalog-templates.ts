@@ -41,15 +41,15 @@ export const CATALOG_TEMPLATES: Record<TemplateId, CatalogTemplate> = {
   classico_dark: {
     id: "classico_dark",
     nome: "Clássico Dark",
-    descricao: "Preto, grafite, elegante — o padrão da estética automotiva premium.",
+    descricao: "Grafite suave e elegante — contraste premium sem depender do preto absoluto.",
     isDark: true,
     palette: {
-      bg: "#0a0a0a",
-      bgDeep: "#141414",
+      bg: "#15191c",
+      bgDeep: "#1d2226",
       textColor: "#ffffff",
-      textMuted: "rgba(255,255,255,0.6)",
+      textMuted: "rgba(255,255,255,0.68)",
       primaryColorDefault: "#e11d2a",
-      secondaryColorDefault: "#111827",
+      secondaryColorDefault: "#242a30",
     },
     cardStyle: {
       borderRadius: "0.75rem",
@@ -92,12 +92,12 @@ export const CATALOG_TEMPLATES: Record<TemplateId, CatalogTemplate> = {
     descricao: "Esportivo, mais agressivo — para quem quer destacar potência e velocidade.",
     isDark: true,
     palette: {
-      bg: "#0a0a0a",
-      bgDeep: "#141414",
+      bg: "#15191c",
+      bgDeep: "#20252a",
       textColor: "#ffffff",
-      textMuted: "rgba(255,255,255,0.6)",
+      textMuted: "rgba(255,255,255,0.68)",
       primaryColorDefault: "#dc2626",
-      secondaryColorDefault: "#111827",
+      secondaryColorDefault: "#242a30",
     },
     cardStyle: {
       borderRadius: "0.75rem",

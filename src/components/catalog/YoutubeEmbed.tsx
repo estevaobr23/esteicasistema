@@ -9,12 +9,12 @@ function extractYoutubeId(url: string): string | null {
   return null;
 }
 
-export default function YoutubeEmbed({ url, title }: { url: string; title: string }) {
+export default function YoutubeEmbed({ url, title, aspect = "video" }: { url: string; title: string; aspect?: "video" | "square" | "portrait" }) {
   const videoId = extractYoutubeId(url);
   if (!videoId) return null;
 
   return (
-    <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
+    <div className={`w-full overflow-hidden rounded-xl bg-neutral-950 ${aspect === "square" ? "aspect-square" : aspect === "portrait" ? "aspect-[9/16]" : "aspect-video"}`}>
       <iframe
         src={`https://www.youtube.com/embed/${videoId}`}
         title={title}
