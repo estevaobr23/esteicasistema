@@ -1,3 +1,4 @@
+import Image from "next/image";
 import FloatingHeader from "@/components/landing/FloatingHeader";
 
 const PRIMARY = "#e11d2a";
@@ -119,11 +120,12 @@ export default function Home() {
             Um site profissional, com a cara da sua marca, pronto pra receber quem chega pelo link — sem parecer
             fotos soltas no WhatsApp.
           </p>
-          <div className="mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-[#141414]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div className="relative mx-auto mt-8 aspect-[9/16] max-w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-[#141414]">
+            <Image
               src="/images/sections/catalogo-geral.png"
-              alt="Visão geral do catálogo público, com o hero e a lista de serviços"
+              alt="Catálogo da Vitrine Detail aberto em um iPhone durante a entrega de um carro em uma estética automotiva"
+              fill
+              sizes="280px"
               className="h-full w-full object-cover"
             />
           </div>
@@ -335,52 +337,78 @@ export default function Home() {
 
           {/* PROFISSIONAL — card branco, destacado, "Mais escolhido" */}
           <div
-            className="relative rounded-2xl border-2 bg-white p-6 shadow-xl"
+            className="relative rounded-2xl border-2 bg-white p-6 pt-8 text-center shadow-xl"
             style={{ borderColor: PRIMARY }}
           >
+            {/* 1. Pill de destaque */}
             <span
-              className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white"
+              className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white"
               style={{ backgroundColor: PRIMARY }}
             >
               ⭐ Mais escolhido
             </span>
+
+            {/* 2. Headline completa do plano */}
             <p className="text-sm font-semibold text-neutral-500">Profissional</p>
-            <p className="mt-3 text-3xl font-bold text-neutral-900">
-              R$97<span className="text-base font-normal text-neutral-400"> vitalício</span>
-            </p>
-            <p className="text-xs text-neutral-400">pagamento único · sem mensalidade</p>
+            <h3 className="mt-1 text-lg font-bold text-neutral-900">
+              Sua vitrine completa, sem limites
+            </h3>
 
-            <ul className="mt-6 space-y-2 text-left text-sm">
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Serviços ilimitados
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Preço por tipo de veículo
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> WhatsApp com contexto
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Horários e paleta da marca
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Antes e depois
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Galeria de fotos e vídeos por serviço
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Pacotes e avaliações de clientes
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Analytics de visitantes
-              </li>
-              <li className="flex items-center gap-2 text-neutral-800">
-                <span className="text-emerald-600">✓</span> Sem marca d&apos;água
-              </li>
-            </ul>
+            {/* 3. Mockup */}
+            <div className="mx-auto mt-5 aspect-[9/16] max-w-[160px] overflow-hidden rounded-xl border border-black/10 shadow-lg">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/sections/catalogo-geral.png"
+                alt="Catálogo público do plano Profissional aberto no celular"
+                className="h-full w-full object-cover"
+              />
+            </div>
 
-            <PlanCTA label="Quero o Profissional" highlight />
+            {/* 4. Preço com valor parcelado em verde */}
+            <div className="mt-6 border-y border-black/5 py-4">
+              <p className="text-3xl font-black tracking-tight text-neutral-900">
+                R$97<span className="text-base font-normal text-neutral-400"> vitalício</span>
+              </p>
+              <p className="mt-1 text-sm font-semibold" style={{ color: "#06a742" }}>
+                ou <b>12x de R$9,70</b> · pagamento único no PIX
+              </p>
+              <p className="mt-1 text-xs text-neutral-400">Pagamento único e zero mensalidade.</p>
+            </div>
+
+            {/* 6. O que está incluso */}
+            <div className="mt-6 text-left">
+              <p className="mb-3 text-sm font-bold uppercase tracking-[.08em] text-neutral-900">
+                O que está incluso:
+              </p>
+              <ul className="space-y-2.5 text-sm">
+                {[
+                  "Serviços ilimitados",
+                  "Preço por tipo de veículo",
+                  "WhatsApp com contexto",
+                  "Horários e paleta da marca",
+                  "Antes e depois",
+                  "Galeria de fotos e vídeos por serviço",
+                  "Pacotes e avaliações de clientes",
+                  "Analytics de visitantes",
+                  "Sem marca d'água",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-neutral-800">
+                    <span
+                      className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
+                      style={{ backgroundColor: "#06a742" }}
+                    >
+                      ✓
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 7. CTA */}
+            <div className="mt-6">
+              <PlanCTA label="Quero o Profissional" highlight />
+            </div>
           </div>
         </div>
       </section>
@@ -472,8 +500,9 @@ function PlanCTA({ label, highlight }: { label: string; highlight?: boolean }) {
         disabled
         title="Checkout em configuração — em breve disponível"
         className={`block w-full cursor-not-allowed rounded-lg py-3 text-center text-sm font-semibold ${
-          highlight ? "bg-neutral-900/5 text-neutral-400" : "bg-white/10 text-white/50"
+          highlight ? "text-white opacity-70" : "bg-white/10 text-white/50"
         }`}
+        style={highlight ? { backgroundColor: "#06a742" } : undefined}
       >
         {label} (em breve)
       </button>

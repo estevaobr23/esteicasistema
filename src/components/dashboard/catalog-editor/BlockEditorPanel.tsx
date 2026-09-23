@@ -11,6 +11,7 @@ import { uploadBusinessMedia } from "@/lib/storage/upload";
 import {
   AspectMiniature,
   BackgroundMiniature,
+  ColumnsMiniature,
   SourceMiniature,
   VisualChoice,
 } from "./CatalogMiniatures";
@@ -359,6 +360,47 @@ export default function BlockEditorPanel({
           onRefresh={() => router.refresh()}
           onChange={(dataSource) => dispatch({ type: "UPDATE_BLOCK_DATA_SOURCE", instanceId, dataSource })}
         />
+      )}
+
+      {(block.type === "destaques" || block.type === "pacotes") && (
+        <EditorGroup title="Layout dos cards" description="No celular sempre empilha. No computador, escolha entre um card largo em destaque ou dois lado a lado.">
+          <div className="grid grid-cols-2 gap-2">
+            <VisualChoice
+              label="Coluna única"
+              description="Card largo, um por linha"
+              selected={block.responsive.columns.desktop === 1}
+              onClick={() => {
+                dispatch({
+                  type: "UPDATE_BLOCK_RESPONSIVE",
+                  instanceId,
+                  responsive: { columns: { mobile: 1, tablet: 1, desktop: 1 } },
+                });
+                if (block.type === "destaques" && block.variant !== "featured") {
+                  dispatch({ type: "SET_BLOCK_VARIANT", instanceId, variant: "featured" });
+                }
+              }}
+            >
+              <ColumnsMiniature columns={1} />
+            </VisualChoice>
+            <VisualChoice
+              label="Colunas duplas"
+              description="2 cards lado a lado"
+              selected={block.responsive.columns.desktop === 2}
+              onClick={() => {
+                dispatch({
+                  type: "UPDATE_BLOCK_RESPONSIVE",
+                  instanceId,
+                  responsive: { columns: { mobile: 1, tablet: 2, desktop: 2 } },
+                });
+                if (block.type === "destaques" && block.variant === "featured") {
+                  dispatch({ type: "SET_BLOCK_VARIANT", instanceId, variant: "cards" });
+                }
+              }}
+            >
+              <ColumnsMiniature columns={2} />
+            </VisualChoice>
+          </div>
+        </EditorGroup>
       )}
 
       <EditorGroup title="Aparência da seção" description="Personalize as cores sem alterar a estrutura segura do catálogo.">

@@ -488,7 +488,7 @@ export default function CatalogPresentation({
       return entries.length > 0 && (
         <section key="destaques" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
           {sectionIntro(block, "Mais procurados", "Os serviços que mais entregam transformação, proteção e praticidade.")}
-          <div className={`mx-auto grid max-w-5xl gap-5 ${block.variant === "featured" ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}>
+          <div className={`mx-auto grid max-w-5xl gap-5 ${block.variant === "featured" ? "grid-cols-1" : columnsClass(block)}`}>
             {entries.map(({ item: s, ref, key }) => {
               const serviceReviews = reviews.filter((review) => review.service_id === s.id);
               const average = serviceReviews.length ? serviceReviews.reduce((total, review) => total + review.rating, 0) / serviceReviews.length : null;
@@ -582,7 +582,10 @@ export default function CatalogPresentation({
       return entries.length > 0 && (
         <section key="pacotes" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
           {sectionIntro(block, "Pacotes", "Combinações prontas para economizar e cuidar do veículo por inteiro.")}
-          <div className={`mx-auto grid max-w-5xl items-start gap-4 ${block.variant === "compact" ? "grid-cols-1" : columnsClass(block)}`}>
+          {(() => {
+            const isSingleColumn = block.variant !== "compact" && block.responsive.columns.desktop === 1 && block.responsive.columns.mobile === 1;
+            return (
+          <div className={`mx-auto grid items-start gap-4 ${isSingleColumn ? "max-w-3xl" : "max-w-5xl"} ${block.variant === "compact" ? "grid-cols-1" : columnsClass(block)}`}>
             {entries.map(({ item: p, key }) => {
               const serviceNames = (p.package_services ?? []).flatMap((relation) => {
                 const service = services.find((item) => item.id === relation.service_id);
@@ -605,7 +608,7 @@ export default function CatalogPresentation({
               return (
               <EditableMedia key={key} editable={editable} onTap={() => onFieldTap?.({ kind: "catalog_block", instanceId: block.instanceId })}>
                 <article
-                  className={`relative flex h-full min-w-0 flex-col border p-5 ${isRecommended ? "pt-8 md:-translate-y-2 md:px-6 md:pb-7 md:pt-9" : ""}`}
+                  className={`relative flex h-full min-w-0 flex-col border p-5 ${isRecommended ? "pt-8 md:-translate-y-2 md:px-6 md:pb-7 md:pt-9" : ""} ${isSingleColumn && hasMedia ? "sm:grid sm:grid-cols-[minmax(0,15rem)_1fr] sm:items-start sm:gap-6" : ""}`}
                   style={{
                     borderColor: isRecommended ? accentColor : isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)",
                     backgroundColor: bg,
@@ -615,18 +618,20 @@ export default function CatalogPresentation({
                   }}
                 >
                   {isRecommended && <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border-4 px-4 py-1.5 text-[9px] font-bold uppercase tracking-[.12em] text-white shadow-lg" style={{ backgroundColor: accentColor, borderColor: bg }}>Melhor escolha</span>}
+
+                  {hasMedia && (
+                    <div className={isSingleColumn ? "-mx-5 -mt-5 sm:col-start-1 sm:mx-0 sm:mt-0 sm:self-stretch" : "-mx-5 mt-5 w-[calc(100%+2.5rem)]"}>
+                      <PackageMedia item={p} />
+                    </div>
+                  )}
+
+                  <div className={isSingleColumn && hasMedia ? "sm:col-start-2" : "contents"}>
                   <div className="min-w-0 text-center">
                     <div className="min-w-0">
                       <p className="text-[10px] font-bold uppercase tracking-[.14em]" style={{ color: accentColor }}>Pacote completo</p>
                       <h3 className="mt-1 text-lg font-semibold">{p.name}</h3>
                     </div>
                   </div>
-
-                  {hasMedia && (
-                    <div className="-mx-5 mt-5 w-[calc(100%+2.5rem)]">
-                      <PackageMedia item={p} />
-                    </div>
-                  )}
 
                   <div className="mt-5 border-y py-4 text-center" style={{ borderColor: isDark ? "rgba(255,255,255,.08)" : "rgba(0,0,0,.06)" }}>
                     {hasDiscount ? (
@@ -678,11 +683,14 @@ export default function CatalogPresentation({
                       </div>
                     )}
                   </div>
+                  </div>
                 </article>
               </EditableMedia>
               );
             })}
           </div>
+            );
+          })()}
         </section>
       );
     },

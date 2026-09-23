@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import ServiceSalesPage from "@/components/catalog/ServiceSalesPage";
 
+// Mesma razão da página de catálogo: revalidatePath() só afeta o processo
+// onde a Server Action rodou, então esta rota precisa buscar sempre fresco.
+export const dynamic = "force-dynamic";
+
 async function getData(slug: string, serviceSlug: string) {
   const supabase = await createClient();
 

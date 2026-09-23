@@ -5,6 +5,13 @@ import { normalizeSectionsConfig } from "@/lib/domain/catalog-sections";
 import CatalogPresentation from "@/components/catalog/CatalogPresentation";
 import PageViewTracker from "@/components/catalog/PageViewTracker";
 
+// Catálogo público: sempre busca os dados atuais do banco, sem cache.
+// Necessário porque revalidatePath() ao salvar no editor só invalida o
+// cache do processo Next.js onde a Server Action rodou — se o lead salva
+// localmente, a produção (Vercel) nunca fica sabendo e serviria dados
+// desatualizados indefinidamente sem esta diretiva.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {
