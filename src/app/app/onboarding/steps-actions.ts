@@ -6,6 +6,9 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentBusinessRaw } from "@/lib/domain/business-raw";
 import { limitesDoPlano } from "@/lib/domain/plans";
 import { getCatalogTemplate } from "@/lib/domain/catalog-templates";
+import { createTemplateLayout } from "@/lib/catalog-builder/template-layouts";
+import { createExampleCatalogLayout, isExampleCatalogLayout } from "@/lib/domain/seed-example-catalog";
+import type { Json } from "@/lib/supabase/types";
 
 export async function saveVisual(formData: FormData) {
   const business = await getCurrentBusinessRaw();
@@ -17,6 +20,9 @@ export async function saveVisual(formData: FormData) {
   const secondary_color = String(formData.get("secondary_color") ?? catalogTemplate.palette.secondaryColorDefault);
   const logo_url = formData.get("logo_url") ? String(formData.get("logo_url")) : undefined;
   const cover_url = formData.get("cover_url") ? String(formData.get("cover_url")) : undefined;
+  const catalogLayout = isExampleCatalogLayout(business.catalog_layout)
+    ? createExampleCatalogLayout(catalogTemplate.id)
+    : createTemplateLayout(catalogTemplate.id);
 
   await supabase
     .from("businesses")
@@ -27,6 +33,9 @@ export async function saveVisual(formData: FormData) {
       secondary_color,
       logo_url,
       cover_url,
+      catalog_layout: catalogLayout as unknown as Json,
+      catalog_layout_version: 1,
+      catalog_updated_at: new Date().toISOString(),
     })
     .eq("id", business.id);
 
@@ -101,11 +110,26 @@ export async function saveServicos(formData: FormData) {
     redirect(`/app/onboarding?etapa=servicos&erro=${encodeURIComponent("Não foi possível carregar os serviços selecionados.")}`);
   }
 
-  // Remove serviços anteriores gerados pelo onboarding para essa conta antes
-  // de reinserir — evita duplicar se o usuário voltar e re-selecionar.
-  await supabase.from("services").delete().eq("business_id", business.id);
+  const { data: existingServices } = await supabase
+    .from("services")
+    .select("id,name")
+    .eq("business_id", business.id);
+  const templateNames = new Set((templates ?? []).map((template) => template.name));
+  const allTemplateResult = await supabase.from("service_templates").select("name");
+  const allTemplateNames = new Set((allTemplateResult.data ?? []).map((template) => template.name));
+
+  for (const service of existingServices ?? []) {
+    if (allTemplateNames.has(service.name) && !templateNames.has(service.name)) {
+      await supabase.from("services").update({ active: false }).eq("id", service.id);
+    }
+  }
 
   for (const [index, template] of templates!.entries()) {
+    const existing = (existingServices ?? []).find((service) => service.name === template.name);
+    if (existing) {
+      await supabase.from("services").update({ active: true, sort_order: index + 1 }).eq("id", existing.id);
+      continue;
+    }
     const { data: service, error } = await supabase
       .from("services")
       .insert({
@@ -115,7 +139,8 @@ export async function saveServicos(formData: FormData) {
         short_description: template.short_description,
         description: template.description,
         price_type: "quote",
-        sort_order: index,
+        active: true,
+        sort_order: index + 1,
       })
       .select("id")
       .single();
@@ -143,8 +168,9 @@ export async function savePrecos(formData: FormData) {
 
   const { data: services } = await supabase
     .from("services")
-    .select("id")
-    .eq("business_id", business.id);
+    .select("id,service_prices(vehicle_type,promotional_price)")
+    .eq("business_id", business.id)
+    .eq("active", true);
 
   if (!services) redirect("/app/onboarding?etapa=precos");
 
@@ -156,7 +182,8 @@ export async function savePrecos(formData: FormData) {
     if (priceType === "vehicle") {
       const rows = VEHICLE_TYPES.map((vt) => {
         const raw = formData.get(`price__${service.id}__${vt}`);
-        return raw ? { service_id: service.id, vehicle_type: vt as string, price: Number(raw) } : null;
+        const currentPromotionalPrice = service.service_prices.find((price) => price.vehicle_type === vt)?.promotional_price ?? null;
+        return raw ? { service_id: service.id, vehicle_type: vt as string, price: Number(raw), promotional_price: currentPromotionalPrice } : null;
       }).filter((r) => r !== null);
 
       if (rows.length > 0) {

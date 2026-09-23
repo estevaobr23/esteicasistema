@@ -582,7 +582,7 @@ export default function CatalogPresentation({
       return entries.length > 0 && (
         <section key="pacotes" className="px-4 py-16" style={{ backgroundColor: bgColor }}>
           {sectionIntro(block, "Pacotes", "Combinações prontas para economizar e cuidar do veículo por inteiro.")}
-          <div className={`mx-auto grid max-w-5xl items-start gap-4 ${block.variant === "compact" ? "grid-cols-1" : block.variant === "comparison" ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 sm:grid-cols-2"}`}>
+          <div className={`mx-auto grid max-w-5xl items-start gap-4 ${block.variant === "compact" ? "grid-cols-1" : columnsClass(block)}`}>
             {entries.map(({ item: p, key }) => {
               const serviceNames = (p.package_services ?? []).flatMap((relation) => {
                 const service = services.find((item) => item.id === relation.service_id);
@@ -1179,7 +1179,7 @@ export default function CatalogPresentation({
             const wrapperClass = `${WIDTH_CLASS[block.style.width]} ${SPACING_CLASS[block.style.spacing]} ${responsiveVisibility}`;
             if (!editable) return <CatalogSectionMotion key={block.instanceId} preset={animationPreset} className={wrapperClass} style={{ textAlign: block.style.align }}>{rendered}</CatalogSectionMotion>;
             return (
-              <CatalogSectionMotion key={block.instanceId} preset={animationPreset} className={wrapperClass} style={{ textAlign: block.style.align }}>
+              <CatalogSectionMotion key={block.instanceId} preset={animationPreset} className={`${wrapperClass} mb-6`} style={{ textAlign: block.style.align }}>
               <div
                 className={`group relative cursor-pointer outline-dashed outline-1 outline-offset-[-2px] transition hover:outline-white/40 ${block.visible ? "outline-transparent" : "opacity-50 outline-white/30"}`}
                 onClick={() => onFieldTap?.({ kind: "catalog_block", instanceId: block.instanceId })}

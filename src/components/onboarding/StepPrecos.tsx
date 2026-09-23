@@ -7,8 +7,9 @@ export default async function StepPrecos({ business }: { business: Business }) {
   const supabase = await createClient();
   const { data: services } = await supabase
     .from("services")
-    .select("*")
+    .select("*,service_prices(vehicle_type,price,promotional_price)")
     .eq("business_id", business.id)
+    .eq("active", true)
     .order("sort_order");
 
   return (
@@ -20,7 +21,14 @@ export default async function StepPrecos({ business }: { business: Business }) {
 
       <form action={savePrecos} className="mt-8 space-y-4">
         {(services ?? []).map((s) => (
-          <PrecoServicoForm key={s.id} serviceId={s.id} serviceName={s.name} />
+          <PrecoServicoForm
+            key={s.id}
+            serviceId={s.id}
+            serviceName={s.name}
+            initialPriceType={s.price_type as "fixed" | "from" | "vehicle" | "quote"}
+            initialBasePrice={s.base_price}
+            vehiclePrices={s.service_prices}
+          />
         ))}
 
         <button

@@ -56,6 +56,9 @@ export default function CatalogEditor({
   const [showBlockLibrary, setShowBlockLibrary] = useState(false);
   const [addAfterInstanceId, setAddAfterInstanceId] = useState<string | undefined>();
   const [editMode, setEditMode] = useState(true);
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
+  const hasExampleContent = state.layout.blocks.some((block) => block.instanceId.startsWith("onboarding-example"));
+  const [showExampleNotice, setShowExampleNotice] = useState(hasExampleContent);
   const editingSalesPageServiceId = searchParams.get("servico");
   const plano = business.plano as "essencial" | "profissional";
   const limites = limitesDoPlano(plano);
@@ -229,6 +232,34 @@ export default function CatalogEditor({
             {editMode ? "✎ Editando" : "Ativar edição"}
           </button>
           <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <div className="hidden items-center gap-0.5 rounded-lg border border-neutral-800 p-0.5 sm:flex">
+              <button
+                type="button"
+                onClick={() => setPreviewDevice("desktop")}
+                aria-label="Ver como desktop"
+                aria-pressed={previewDevice === "desktop"}
+                className={`flex h-7 w-8 items-center justify-center rounded-md text-xs transition ${
+                  previewDevice === "desktop" ? "bg-neutral-800 text-white" : "text-neutral-500 hover:text-neutral-300"
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+                  <path d="M2 4.25A2.25 2.25 0 0 1 4.25 2h11.5A2.25 2.25 0 0 1 18 4.25v8.5A2.25 2.25 0 0 1 15.75 15H11v1.5h2.25a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5H9V15H4.25A2.25 2.25 0 0 1 2 12.75v-8.5Zm2.25-.75a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h11.5a.75.75 0 0 0 .75-.75v-8.5a.75.75 0 0 0-.75-.75H4.25Z" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewDevice("mobile")}
+                aria-label="Ver como celular"
+                aria-pressed={previewDevice === "mobile"}
+                className={`flex h-7 w-8 items-center justify-center rounded-md text-xs transition ${
+                  previewDevice === "mobile" ? "bg-neutral-800 text-white" : "text-neutral-500 hover:text-neutral-300"
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+                  <path fillRule="evenodd" d="M6 2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H6Zm0 1.5h8a.5.5 0 0 1 .5.5v10.5h-9V4a.5.5 0 0 1 .5-.5Zm3 12.5a1 1 0 1 0 2 0 1 1 0 0 0-2 0Z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
             {editMode && (
               <button
                 type="button"
@@ -269,21 +300,56 @@ export default function CatalogEditor({
         </div>
       </div>
 
-      <CatalogPresentation
-        business={previewBusiness}
-        services={previewServices}
-        packages={packages}
-        portfolioItems={portfolioItems}
-        availabilitySlots={availabilitySlots}
-        reviews={reviews}
-        sectionsConfig={state.sectionsConfig}
-        catalogLayout={state.layout}
-        editable={editMode}
-        onFieldTap={editMode ? setActiveTarget : undefined}
-        onMoveBlock={editMode ? (instanceId, direction) => dispatch({ type: "MOVE_BLOCK", instanceId, direction }) : undefined}
-        onAddBlockAfter={editMode ? openBlockLibrary : undefined}
-        onRemoveHeroBadge={editMode ? (badge) => dispatch({ type: "SET_HERO_BADGE", badge, visible: false }) : undefined}
-      />
+      {showExampleNotice && !state.dirty && (
+        <div className="border-b border-sky-900/60 bg-sky-950/80 px-4 py-3 text-sky-100">
+          <div className="mx-auto flex max-w-5xl items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold">Conteúdo de exemplo</p>
+              <p className="mt-0.5 text-xs text-sky-200/70">Revise textos, preços e imagens antes de publicar. Tudo pode ser editado.</p>
+            </div>
+            <button type="button" onClick={() => setShowExampleNotice(false)} className="shrink-0 text-xs font-semibold text-sky-200 underline">Entendi</button>
+          </div>
+        </div>
+      )}
+
+      {previewDevice === "mobile" ? (
+        <div className="flex justify-center overflow-x-auto bg-neutral-950 px-4 py-8 sm:py-10">
+          <div>
+            <div className="w-[390px] overflow-hidden rounded-[2.5rem] border-[10px] border-neutral-800 bg-black shadow-2xl">
+              <div className="relative h-6 bg-neutral-800">
+                <div className="absolute left-1/2 top-1 h-4 w-24 -translate-x-1/2 rounded-full bg-black" />
+              </div>
+              <iframe
+                key={business.slug}
+                src={`/${business.slug}`}
+                title="Prévia no celular"
+                width={390}
+                height={720}
+                className="block bg-white"
+              />
+            </div>
+            <p className="mt-3 text-center text-xs text-neutral-500">
+              Prévia real da última versão salva. Edite no modo desktop e clique em Salvar para atualizar aqui.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <CatalogPresentation
+          business={previewBusiness}
+          services={previewServices}
+          packages={packages}
+          portfolioItems={portfolioItems}
+          availabilitySlots={availabilitySlots}
+          reviews={reviews}
+          sectionsConfig={state.sectionsConfig}
+          catalogLayout={state.layout}
+          editable={editMode}
+          onFieldTap={editMode ? setActiveTarget : undefined}
+          onMoveBlock={editMode ? (instanceId, direction) => dispatch({ type: "MOVE_BLOCK", instanceId, direction }) : undefined}
+          onAddBlockAfter={editMode ? openBlockLibrary : undefined}
+          onRemoveHeroBadge={editMode ? (badge) => dispatch({ type: "SET_HERO_BADGE", badge, visible: false }) : undefined}
+        />
+      )}
 
       <BottomSheet
         target={activeTarget}

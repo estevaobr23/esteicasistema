@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { gerarSlugDisponivel } from "@/lib/domain/business";
 import type { Plano } from "@/lib/domain/plans";
+import { seedExampleCatalogContent } from "@/lib/domain/seed-example-catalog";
 
 /**
  * O portão: único ponto do sistema que decide se alguém entra.
@@ -49,15 +50,27 @@ export async function createBusiness(formData: FormData) {
   const plano = purchase.plano as Plano;
   const slug = await gerarSlugDisponivel(nome);
 
-  const { error } = await supabase.from("businesses").insert({
-    owner_id: user.id,
-    name: nome,
-    slug,
-    plano,
-  });
+  const { data: business, error } = await supabase
+    .from("businesses")
+    .insert({ owner_id: user.id, name: nome, slug, plano })
+    .select("id,name,plano")
+    .single();
 
-  if (error) {
+  if (error || !business) {
     redirect(`/app/onboarding?erro=${encodeURIComponent("Não foi possível criar seu negócio. Tente novamente.")}`);
+  }
+
+  try {
+    await seedExampleCatalogContent({
+      supabase: admin,
+      businessId: business.id,
+      businessName: business.name,
+      plano: business.plano as Plano,
+    });
+  } catch (seedError) {
+    console.error("Falha ao preparar catálogo de exemplo", seedError);
+    await admin.from("businesses").delete().eq("id", business.id);
+    redirect(`/app/onboarding?erro=${encodeURIComponent("Não foi possível preparar seu catálogo de exemplo. Tente novamente.")}`);
   }
 
   await admin

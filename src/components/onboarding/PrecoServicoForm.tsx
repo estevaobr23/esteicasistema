@@ -14,11 +14,17 @@ type PriceType = "fixed" | "from" | "vehicle" | "quote";
 export default function PrecoServicoForm({
   serviceId,
   serviceName,
+  initialPriceType,
+  initialBasePrice,
+  vehiclePrices,
 }: {
   serviceId: string;
   serviceName: string;
+  initialPriceType: PriceType;
+  initialBasePrice: number | null;
+  vehiclePrices: { vehicle_type: string; price: number; promotional_price: number | null }[];
 }) {
-  const [priceType, setPriceType] = useState<PriceType>("quote");
+  const [priceType, setPriceType] = useState<PriceType>(initialPriceType);
 
   return (
     <div className="rounded-lg border border-neutral-800 bg-neutral-900 p-4">
@@ -60,6 +66,7 @@ export default function PrecoServicoForm({
           name={`base_price__${serviceId}`}
           min={0}
           step="0.01"
+          defaultValue={initialBasePrice ?? undefined}
           placeholder="R$ 0,00"
           className="w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white placeholder:text-neutral-600 focus:border-neutral-600 focus:outline-none"
         />
@@ -75,6 +82,7 @@ export default function PrecoServicoForm({
                 name={`price__${serviceId}__${v.key}`}
                 min={0}
                 step="0.01"
+                defaultValue={vehiclePrices.find((price) => price.vehicle_type === v.key)?.price}
                 placeholder="R$ 0,00"
                 className="w-full rounded-md border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white placeholder:text-neutral-600 focus:border-neutral-600 focus:outline-none"
               />

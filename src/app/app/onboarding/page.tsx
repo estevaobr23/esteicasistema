@@ -92,6 +92,15 @@ function OnboardingShell({
           </div>
         )}
 
+        {etapaAtual !== "negocio" && (
+          <div className="mb-6 rounded-xl border border-sky-900/70 bg-sky-950/30 px-4 py-3 text-sm text-sky-100">
+            <p className="font-semibold">Seu catálogo de exemplo já está pronto.</p>
+            <p className="mt-1 text-xs leading-5 text-sky-200/70">
+              Use estas etapas para ajustar o visual, escolher serviços e revisar preços. Fotos, pacotes, portfólio e avaliações poderão ser editados depois.
+            </p>
+          </div>
+        )}
+
         {children}
       </div>
     </main>

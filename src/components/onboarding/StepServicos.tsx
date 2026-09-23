@@ -9,6 +9,11 @@ export default async function StepServicos({ business }: { business: Business })
     .from("service_templates")
     .select("*")
     .order("sort_order");
+  const { data: currentServices } = await supabase
+    .from("services")
+    .select("name,active")
+    .eq("business_id", business.id);
+  const activeNames = new Set((currentServices ?? []).filter((service) => service.active).map((service) => service.name));
 
   const limite = limitesDoPlano(business.plano as "essencial" | "profissional").maxServicosAtivos;
 
@@ -33,6 +38,7 @@ export default async function StepServicos({ business }: { business: Business })
                 type="checkbox"
                 name="template_id"
                 value={t.id}
+                defaultChecked={activeNames.has(t.name)}
                 className="mt-1 h-4 w-4 accent-white"
               />
               <span>
