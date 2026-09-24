@@ -435,16 +435,6 @@ export default function Home() {
             </p>
             <p className="text-xs text-white/40">pagamento único · sem mensalidade</p>
 
-            <Image
-              src="/images/mockups/vitrine-detail-device-group.png"
-              alt="Vitrine Detail em notebook, iPad e iPhone"
-              width={1536}
-              height={1024}
-              unoptimized
-              sizes="(max-width: 640px) 100vw, 320px"
-              className="mx-auto mt-4 w-full max-w-[280px]"
-            />
-
             <ul className="mt-6 space-y-2 text-left text-sm">
               <li className="flex items-center gap-2 text-white/80">
                 <span className="text-emerald-500">✓</span> Até 3 serviços cadastrados
