@@ -367,6 +367,93 @@ export default function Home() {
         </div>
       </section>
 
+      {/* BÔNUS — 3 bônus exclusivos do Profissional, empilhamento de valor antes da oferta (padrão low ticket) */}
+      <section className="px-4 py-16" style={{ backgroundColor: PRIMARY_DEEP }}>
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">
+            Só no plano Profissional
+          </p>
+          <h2 className="text-2xl font-bold sm:text-3xl">Além do catálogo, você ainda leva 3 bônus.</h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm text-white/80">
+            Ferramentas que normalmente vêm cobradas à parte — aqui já incluídas de graça no plano
+            Profissional.
+          </p>
+
+          <div className="mx-auto mt-24 grid max-w-3xl grid-cols-1 gap-x-5 gap-y-28 pt-2 sm:grid-cols-3">
+            {[
+              {
+                image: "/images/bonuses/analytics-visitantes-bonus.png",
+                alt: "Mockup do Analytics de visitantes com métricas, funil e ranking de serviços",
+                title: "Analytics de visitantes",
+                desc: "Veja quantas pessoas abriram seu catálogo e quais serviços mais geraram clique no WhatsApp.",
+                valor: "37",
+              },
+              {
+                image: "/images/bonuses/avaliacoes-clientes-bonus.png",
+                alt: "Mockup de avaliações de clientes com nota média, formulário e depoimentos",
+                title: "Avaliações de clientes",
+                desc: "Cadastre depoimentos com estrelas em segundos — reforça confiança antes do primeiro contato.",
+                valor: "37",
+              },
+              {
+                image: "/images/bonuses/orcamento-whatsapp-bonus.png",
+                alt: "Mockup do catálogo com cards de serviços e botão de orçamento pelo WhatsApp",
+                title: "Orçamento por WhatsApp",
+                desc: "Cliente monta o orçamento dele no catálogo e o WhatsApp já chega com os itens e o total certo.",
+                valor: "67",
+              },
+            ].map((b) => (
+              <div key={b.title} className="relative rounded-2xl bg-white pb-6 pt-28 text-left text-neutral-900 shadow-xl">
+                <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-full max-w-[300px] -translate-x-1/2 sm:h-44">
+                  <Image
+                    src={b.image}
+                    alt={b.alt}
+                    fill
+                    unoptimized
+                    sizes="300px"
+                    className="object-contain object-bottom drop-shadow-[0_20px_25px_rgba(0,0,0,0.45)]"
+                  />
+                </div>
+                <div className="px-6 text-center">
+                  <h3 className="text-base font-bold">{b.title}</h3>
+                  <p className="mt-2 text-sm text-neutral-600">{b.desc}</p>
+                </div>
+                <div className="mt-4 flex items-center justify-between border-t border-black/5 px-6 pt-3">
+                  <span className="text-sm font-semibold line-through" style={{ color: "#e11d2a" }}>
+                    De R${b.valor}
+                  </span>
+                  <span
+                    className="rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white"
+                    style={{ backgroundColor: "#06a742" }}
+                  >
+                    Vai sair de graça
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mx-auto mt-12 max-w-sm">
+            <div className="rounded-2xl bg-white p-6 text-neutral-900 shadow-2xl">
+              <p className="text-sm text-neutral-500">
+                Os 3 bônus juntos valeriam{" "}
+                <span className="font-semibold line-through" style={{ color: "#e11d2a" }}>
+                  R$141
+                </span>
+              </p>
+              <p className="mt-1 text-2xl font-black">Totalmente de graça no Profissional.</p>
+              <a
+                href="#planos"
+                className="mt-4 block w-full rounded-lg py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition hover:opacity-90"
+                style={{ backgroundColor: "#06a742" }}
+              >
+                Quero o Profissional com os bônus
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* TANGIBILIZAÇÃO 6 — É basicamente seu próprio site */}
       <section className="bg-[#141414] px-4 py-16">
         <div className="mx-auto max-w-2xl text-center">
@@ -528,16 +615,18 @@ export default function Home() {
               </p>
               <ul className="space-y-2.5 text-sm">
                 {[
-                  "Serviços ilimitados",
-                  "WhatsApp com contexto",
-                  "Horários e paleta da marca",
-                  "Portfólio e galeria de fotos",
-                  "Vídeos no catálogo",
-                  "Pacotes e avaliações de clientes",
-                  "Analytics de visitantes",
-                  "Oculta e reordena seções do catálogo",
-                  "Sem marca d'água",
-                ].map((item) => (
+                  { item: "Serviços ilimitados" },
+                  { item: "WhatsApp com contexto" },
+                  { item: "Horários e paleta da marca" },
+                  { item: "Portfólio e galeria de fotos" },
+                  { item: "Vídeos no catálogo" },
+                  { item: "Pacotes de serviços" },
+                  { item: "Oculta e reordena seções do catálogo" },
+                  { item: "Sem marca d'água" },
+                  { item: "Analytics de visitantes", bonus: true },
+                  { item: "Avaliações de clientes", bonus: true },
+                  { item: "Orçamento por WhatsApp", bonus: true },
+                ].map(({ item, bonus }) => (
                   <li key={item} className="flex items-start gap-2 text-neutral-800">
                     <span
                       className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
@@ -545,7 +634,17 @@ export default function Home() {
                     >
                       ✓
                     </span>
-                    {item}
+                    <span>
+                      {item}
+                      {bonus && (
+                        <span
+                          className="ml-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white"
+                          style={{ backgroundColor: "#e11d2a" }}
+                        >
+                          🎁 Bônus
+                        </span>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -637,4 +736,3 @@ export default function Home() {
     </div>
   );
 }
-
