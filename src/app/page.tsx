@@ -3,6 +3,7 @@ import FloatingHeader from "@/components/landing/FloatingHeader";
 import DownsellModal from "@/components/landing/DownsellModal";
 import PlanCTA from "@/components/landing/PlanCTA";
 import MetaPixel from "@/components/landing/MetaPixel";
+import UtmifyPixel from "@/components/landing/UtmifyPixel";
 
 const PRIMARY = "#e11d2a";
 const PRIMARY_DEEP = "#b8121e";
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <div className="bg-[#0a0a0a] text-white">
       <MetaPixel />
+      <UtmifyPixel />
       {/* HEADER — só logo e âncoras, sem CTA de conta */}
       <FloatingHeader />
 
