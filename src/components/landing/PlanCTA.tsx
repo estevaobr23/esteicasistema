@@ -1,6 +1,7 @@
 "use client";
 
 import { trackMetaEvent } from "@/lib/meta-pixel";
+import { withUtm } from "@/lib/utm";
 
 export default function PlanCTA({
   label,
@@ -17,9 +18,11 @@ export default function PlanCTA({
     <div className="mt-6">
       <a
         href={href}
-        onClick={() =>
-          trackMetaEvent("InitiateCheckout", { value, currency: "BRL", content_name: label })
-        }
+        onClick={(e) => {
+          e.preventDefault();
+          trackMetaEvent("InitiateCheckout", { value, currency: "BRL", content_name: label });
+          window.location.href = withUtm(href);
+        }}
         className={`block w-full rounded-lg py-3 text-center text-sm font-semibold transition ${
           highlight ? "text-white hover:opacity-90" : "bg-white/10 text-white hover:bg-white/15"
         }`}

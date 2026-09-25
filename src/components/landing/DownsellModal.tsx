@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { trackMetaEvent } from "@/lib/meta-pixel";
+import { withUtm } from "@/lib/utm";
 
 const PRIMARY = "#e11d2a";
 
@@ -83,13 +84,15 @@ export default function DownsellModal({
 
             <a
               href={downsellLink}
-              onClick={() =>
+              onClick={(e) => {
+                e.preventDefault();
                 trackMetaEvent("InitiateCheckout", {
                   value: 59.9,
                   currency: "BRL",
                   content_name: "Profissional (downsell)",
-                })
-              }
+                });
+                window.location.href = withUtm(downsellLink);
+              }}
               className="mt-5 block w-full rounded-lg py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
               style={{ backgroundColor: "#06a742" }}
             >
@@ -98,13 +101,15 @@ export default function DownsellModal({
 
             <a
               href={iniciantLink}
-              onClick={() =>
+              onClick={(e) => {
+                e.preventDefault();
                 trackMetaEvent("InitiateCheckout", {
                   value: 37,
                   currency: "BRL",
                   content_name: "Iniciante",
-                })
-              }
+                });
+                window.location.href = withUtm(iniciantLink);
+              }}
               className="mt-3 block text-xs text-neutral-400 underline hover:text-neutral-600"
             >
               Não, quero continuar só com o Iniciante
