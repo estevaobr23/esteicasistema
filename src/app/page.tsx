@@ -520,7 +520,8 @@ export default function Home() {
           >
             <p className="text-sm font-semibold text-white/60">Iniciante</p>
             <p className="mt-3 text-3xl font-bold text-white">
-              R$37<span className="text-base font-normal text-white/40"> vitalício</span>
+              R$37<span className="text-base">,00</span>
+              <span className="text-base font-normal text-white/40"> vitalício</span>
             </p>
             <p className="text-xs text-white/40">pagamento único · sem mensalidade</p>
 
@@ -600,10 +601,11 @@ export default function Home() {
             {/* 4. Preço com valor parcelado em verde */}
             <div className="mt-6 border-y border-black/5 py-4">
               <p className="text-3xl font-black tracking-tight text-neutral-900">
-                R$67<span className="text-base font-normal text-neutral-400"> vitalício</span>
+                R$47<span className="text-lg">,90</span>
+                <span className="text-base font-normal text-neutral-400"> vitalício</span>
               </p>
               <p className="mt-1 text-sm font-semibold" style={{ color: "#06a742" }}>
-                ou <b>12x de R$6,70</b> · pagamento único no PIX
+                ou <b>12x de R$4,79</b> · pagamento único no PIX
               </p>
               <p className="mt-1 text-xs text-neutral-400">Pagamento único e zero mensalidade.</p>
             </div>
@@ -652,7 +654,7 @@ export default function Home() {
 
             {/* 7. CTA */}
             <div className="mt-6">
-              <PlanCTA label="Quero o Profissional" href={CHECKOUT_PROFISSIONAL} value={67} highlight />
+              <PlanCTA label="Quero o Profissional" href={CHECKOUT_PROFISSIONAL} value={47.9} highlight />
             </div>
           </div>
         </div>

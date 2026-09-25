@@ -70,14 +70,14 @@ export default function DownsellModal({
               Leve o Profissional completo com 10% de desconto
             </h3>
             <p className="mt-2 text-sm text-neutral-500">
-              Antes de ir pro plano Iniciante, veja isso: por menos de R$8 a mais, você libera portfólio, vídeos,
+              Antes de ir pro plano Iniciante, veja isso: por menos de R$6 a mais, você libera portfólio, vídeos,
               pacotes, avaliações e analytics — sem marca d&rsquo;água.
             </p>
 
             <div className="mt-5 border-y border-black/5 py-4">
-              <p className="text-sm text-neutral-400 line-through">R$67</p>
+              <p className="text-sm text-neutral-400 line-through">R$47,90</p>
               <p className="text-3xl font-black tracking-tight text-neutral-900">
-                R$59<span className="text-lg">,90</span>
+                R$42<span className="text-lg">,90</span>
               </p>
               <p className="mt-1 text-xs text-neutral-400">Pagamento único · acesso vitalício</p>
             </div>
@@ -87,7 +87,7 @@ export default function DownsellModal({
               onClick={(e) => {
                 e.preventDefault();
                 trackMetaEvent("InitiateCheckout", {
-                  value: 59.9,
+                  value: 42.9,
                   currency: "BRL",
                   content_name: "Profissional (downsell)",
                 });
